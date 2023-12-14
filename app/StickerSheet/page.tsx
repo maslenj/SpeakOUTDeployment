@@ -152,11 +152,6 @@ export default function Home() {
         />
     },
     {
-      name: "Text Input",
-      element:
-        <Input label="password" placeholder="Password" />
-    },
-    {
       name: "Large Text Input",
       element:
         <LargeTextInput placeholder="Enter text here" />

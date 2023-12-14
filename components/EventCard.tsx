@@ -37,7 +37,7 @@ export function EventCard({ title, start, end, status, image }: props) {
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                 <Button variant="secondary" onClick={() => alert("here are the details of ur event")}>Details</Button>
-                <Button variant="secondary" onClick={() => alert("are u available")}>I'm Available</Button>
+                <Button variant="secondary" onClick={() => alert("are u available")}>I&apos;m Available</Button>
             </div>
         </span>
     );
