@@ -18,7 +18,7 @@ export function dateToAMPM(date: Date) {
 
   // To display "0" as "12"
   hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
+  let minutesNumber = minutes < 10 ? '0' + minutes : minutes;
 
-  return hours + ':' + minutes + ' ' + newformat
+  return hours + ':' + minutesNumber + ' ' + newformat
 }

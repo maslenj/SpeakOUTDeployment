@@ -2,13 +2,12 @@ import React, { useState, ReactNode } from 'react';
 
 interface props {
     variant?: "h1" | "h2" | "h3" | "h4" | "p1" | "p2" | "b1" | "b2"
-    //color?: "primary" | "darker" | "text" | "secondary" | "gradient" | "tertiary1" | "tertiary2" | "tertiary3" | "gray1" | "gray2" | "gray2"
     children: ReactNode
 }
 
 
 
-export default function Typography({ variant="h1", color, children } : props) {
+export default function Typography({ variant="h1", children } : props) {
   let classes = ""
   if (variant == "h1") {
     classes = "text-[40px] font-serif text-[#1E2A78]"
