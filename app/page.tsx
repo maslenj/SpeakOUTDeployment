@@ -24,22 +24,6 @@ export default async function Home() {
           <p> email: user@gmail.com </p>
           <p> password: test </p>
         </div>
-
-        {/* make a div which contains images and does not create any new lines, instead you can scroll horizontally to see the images */}
-        <div className='overflow-x-scroll overflow-y-hidden w-full whitespace-nowrap flex'>
-          <div className='flex-shrink-0' >
-            <img src='/images/event1.jpg' width={1000} alt=''/>
-            <p> hi </p>
-          </div>
-          <div className='flex-shrink-0'>
-            <img  src='/images/event1.jpg' width={600} alt=''/>
-            <p> hi </p>
-          </div>
-          <div className='flex-shrink-0'>
-            <img  src='/images/event1.jpg' width={600} alt=''/>
-            <p> hi </p>
-          </div>
-        </div>
       </main>
     </>
   )
