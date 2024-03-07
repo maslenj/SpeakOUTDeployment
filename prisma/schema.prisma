@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -15,22 +15,35 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   email         String   @unique
+  phonenum      String   @default("")
   password      String   
   tags          String[]
   notifactions  Notification[]
   role          Role     @default(USER)
+  firstname     String   @default("")
+  lastname      String   @default("")
+  pronouns      String   @default("")
+  about         String   @default("")
+  image         String   @default("")
+  confirmedEngagements Engagement[] @relation("ConfirmedSpeakers")
+  pendingEngagements   Engagement[] @relation("PendingSpeakers")
 }
 
 model Engagement {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  start     DateTime
-  end       DateTime
-  image     String
-  status    String
-  tags      String[]
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  start       DateTime
+  end         DateTime
+  image       String
+  status      String
+  tags        String[]
+  location    String
+  description String
+  capacity    Int
+  confirmedSpeakers User[]      @relation("ConfirmedSpeakers")
+  pendingSpeakers   User[]      @relation("PendingSpeakers")
 }
 
 model Notification {

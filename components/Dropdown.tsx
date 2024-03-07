@@ -1,11 +1,11 @@
+"use client"
 import React, { useState } from 'react';
 
 interface Props {
   options: string[];
-  onSelect: (option: string) => void;
 }
 
-export default function Dropdown({ options, onSelect }: Props) {
+export default function Dropdown({ options }: Props) {
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [showDropDown, setShowDropDown] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);

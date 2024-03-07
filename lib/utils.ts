@@ -6,7 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function dateToAMPM(date: Date) {
-
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
@@ -18,7 +17,19 @@ export function dateToAMPM(date: Date) {
 
   // To display "0" as "12"
   hours = hours ? hours : 12;
-  let minutesNumber = minutes < 10 ? '0' + minutes : minutes;
+  const minutesString = minutes < 10 ? '0' + minutes: minutes;
 
-  return hours + ':' + minutesNumber + ' ' + newformat
+  return hours + ':' + minutesString + ' ' + newformat
+}
+
+export function formatDate(date: Date) {
+  // Array of day names
+  const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+  // Array of month names
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  // Get the day of the week, date, and month
+  const month = months[date.getMonth()];
+  const dayOfMonth = date.getDate();
+  // Return the formatted string
+  return `${month} ${dayOfMonth},`;
 }

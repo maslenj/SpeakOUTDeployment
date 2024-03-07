@@ -1,33 +1,11 @@
 import Typography from '@/components/Typography'
 import { RegisterForm } from './form'
 import Link from 'next/link'
-const elementStyle = {
-    background: `
-    radial-gradient(
-        farthest-corner at bottom left,
-        rgba(255, 0, 0, 0.5),
-        transparent 600px
-    ),
-    radial-gradient(
-        farthest-side at top right,
-        rgba(100, 0, 255, 0.5),
-        transparent
-    ),
-    radial-gradient(
-        farthest-corner at bottom right,
-        rgba(0, 100, 50, 0.5),
-        transparent 600px
-    ),
-    radial-gradient(
-        farthest-side at top left,
-        rgba(255, 255, 0, 0.5),
-        transparent
-    )`,
-};
+import { radialGradientBackground } from '@/lib/styles'
 
 export default function RegisterPage() {
     return (
-        <div className="min-h-screen flex justify-center items-center" style={elementStyle}>
+        <div className="min-h-screen flex justify-center items-center" style={radialGradientBackground}>
             <div className="shadow-xl p-4 bg-white rounded-xl basis-[500px]">
                 <div className="flex justify-left items-left w-full rounded-lg">
                     <img src="images/SpeakOUTLogo.svg" />
@@ -39,7 +17,6 @@ export default function RegisterPage() {
                 <div className='mt-12 flex items-center justify-center'>
                     <Typography variant="p1"> Already have an account? <Link className='font-medium text-[#140222] hover:underline' href='/login'>Sign In.</Link></Typography>
                 </div>
-
             </div>
         </div>
     )

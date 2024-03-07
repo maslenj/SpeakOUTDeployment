@@ -28,22 +28,17 @@ export async function POST(request: Request) {
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             return new NextResponse(
-                JSON.stringify({
-                    error: "An account with that email already exists. Please sign in or register with different email."
-                }),
-                {
-                    status: 400
-                }
+                JSON.stringify({ error: "An account with that email already exists. Please sign in or register with different email." }),
+                { status: 400 }
             )
         }
         return new NextResponse(
-            JSON.stringify({
-                error: "An unknown error occurred while creating the user."
-            }),
-            {
-                status: 500
-            }
+            JSON.stringify({ error: "An unknown error occurred while attempting to create the user. Please try again." }),
+            { status: 500 }
         )
     }
-    return new NextResponse("success", { status: 200 });
+    return new NextResponse(
+        JSON.stringify({ message:  "success" }), 
+        { status: 200 }
+    );
 }

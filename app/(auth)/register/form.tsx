@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import Button from '@/components/Button'
 import { Input } from '@/components/TextInput'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
-interface RegistrationData {
+interface RegistrationData { 
     email?: string,
     password?: string,
     accesscode?: string
@@ -13,6 +14,9 @@ interface RegistrationData {
 export const RegisterForm = () => {
     const [formData, setFormData] = useState<RegistrationData>({})
     const [error, setError] = useState(null)
+    const router = useRouter()
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(formData => {
             return ({
@@ -24,7 +28,6 @@ export const RegisterForm = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-
         try {
             const res = await fetch('/api/register', {
                 method: 'POST',
@@ -34,7 +37,12 @@ export const RegisterForm = () => {
                 }
             })
             if (res.ok) {
-                signIn()
+                await signIn('credentials', {
+                    email: formData.email,
+                    password: formData.password,
+                    redirect: true,
+                    callbackUrl: '/bio'
+                })
             } else {
                 setError((await res.json()).error)
             }

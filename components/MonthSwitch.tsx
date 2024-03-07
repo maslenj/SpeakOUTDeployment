@@ -1,67 +1,68 @@
+"use client"
 import React, { useState } from 'react';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 
+
 interface Props {
-  initialMonth: number;
-  initialYear: number;
+  setCurrentDate: any
+  currentDate: Date
 }
 
-export default function MonthSwitch({ initialMonth, initialYear }: Props) {
-  const [month, setMonth] = useState<number>(initialMonth);
-  const [year, setYear] = useState<number>(initialYear);
+export default function MonthSwitch({ setCurrentDate, currentDate }: Props) {
+  const handlePrev = () => {
+    setCurrentDate((date : Date) => {
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let day = date.getDate();
 
-// const handlePrev = () => {
-//     setMonth((month) => (month === 0 ? 11 : month - 1));
-//     if (month === 11) {
-//         setYear((year) => (year - 1));
-//     }
-// };
-
-// const handleNext = () => {
-//     setMonth((month) => (month === 11 ? 0 : month + 1));
-//     if (month === 0) {
-//         setYear((year) => (year + 1));
-//     }
-// };
-
-const handlePrev = () => {
-    setMonth((month) => {
+      // Adjust for month and year when month is January
       if (month === 0) {
-        setYear((year) => year - 1);
-        return 11;
+        month = 11;
+        year--;
+      } else {
+        month--;
       }
-      return month - 1;
+
+      return new Date(year, month, day);
     });
   };
 
   const handleNext = () => {
-    setMonth((month) => {
+    setCurrentDate((date : Date) => {
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let day = date.getDate();
+
+      // Adjust for month and year when month is December
       if (month === 11) {
-        setYear((year) => year + 1);
-        return 0;
+        month = 0;
+        year++;
+      } else {
+        month++;
       }
-      return month + 1;
+
+      return new Date(year, month, day);
     });
   };
 
-const formattedDate = new Date(year, month).toLocaleDateString('en-US', {
+  const formattedDate = new Date(currentDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-});
+  });
 
-return (
+  return (
     <div className="flex items-center justify-center">
-        <button className="mx-1 text-blue-900 font-bold" onClick={handlePrev}>
-            <AiOutlineArrowLeft />
-        </button>
+      <button className="mx-1 text-blue-900 font-bold" onClick={handlePrev}>
+        <AiOutlineArrowLeft />
+      </button>
 
-        <div className="mx-1 font-serif text-black text-regular text-3xl">
-            {formattedDate}
-        </div>
-      
-        <button className="mx-1 text-blue-900 font-bold" onClick={handleNext}>
-            <AiOutlineArrowRight />
-        </button>
+      <div className="mx-1 font-serif text-black text-regular text-3xl">
+        {formattedDate}
+      </div>
+
+      <button className="mx-1 text-blue-900 font-bold" onClick={handleNext}>
+        <AiOutlineArrowRight />
+      </button>
     </div>
   );
 };

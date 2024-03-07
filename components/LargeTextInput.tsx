@@ -18,7 +18,7 @@ export default function LargeTextInput({ placeholder }: Props) {
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
-        className="mt-1 p-2 block w-full border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-indigo-950 text-base overflow-y-auto block text-med font-inter text-slate-950"
+        className="mt-1 p-2 block w-full border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-indigo-950 text-base overflow-y-auto text-med font-inter text-slate-950"
       />
     </div>
   );

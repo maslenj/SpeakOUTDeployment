@@ -1,6 +1,8 @@
-"use client";
-import Link from "next/link";
+'use client'
+
 import React from "react";
+import { usePathname } from 'next/navigation'
+import Link from "next/link";
 
 const SidebarElement = ({ icon, text, link, selected }: { icon: any, text: string, link: string, selected: boolean }) => {
   const liClass = {
@@ -30,4 +32,31 @@ const SidebarElement = ({ icon, text, link, selected }: { icon: any, text: strin
     </li>
   );
 };
-export default SidebarElement;
+
+export default function NavbarDesktop({ routes } : { routes: { icon: any, text: string, link: string }[] }) {
+  const pathname = usePathname()
+
+  return (
+    <>
+      <aside
+        id="default-sidebar"
+        className="h-screen"
+        aria-label="Sidebar"
+      >
+        <div className="h-full py-4 overflow-y-auto">
+          <ul className="space-y-2 font-medium">
+            {routes.map((item, index) => (
+              <SidebarElement
+                key={index}
+                icon={item.icon}
+                text={item.text}
+                link={item.link}
+                selected={pathname.includes(item.link)}
+              />
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </>
+  );
+}

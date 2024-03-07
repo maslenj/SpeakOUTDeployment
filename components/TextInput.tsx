@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
-import EmailIcon from './icons/Email';
-import KeyIcon from './icons/Key'
-import PasswordIcon from './icons/Password'
+import EmailIcon from './icons/EmailIcon';
+import KeyIcon from './icons/KeyIcon'
+import PasswordIcon from './icons/PasswordIcon'
 
 import { cn } from '@/lib/utils'
 
@@ -25,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div className="relative">
         {renderIcon(icon)}
         <input
-          className={cn('w-full pl-10 pr-2 pt-2 pb-2 block w-100% border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-indigo-950 text-base flex-center', className)}
+          className={cn('w-full pl-10 pr-2 pt-2 pb-2 inline-block border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-indigo-950 text-base flex-center', className)}
           {...props}
         />
       </div>

@@ -1,63 +1,6 @@
-'use client'
-
-import React from "react";
-import SidebarElement from "./SidebarElement";
-import { usePathname } from 'next/navigation'
-
-export default function Sidebar() {
-  const pathname = usePathname()
-
-  return (
-    <>
-      {/* <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
-        type="button"
-        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-      >
-        <span className="sr-only">Open sidebar</span>
-        <svg
-          className="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clipRule="evenodd"
-            fillRule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zm2-3.75a.75.75 0 00.75.75h11.5a.75.75 0 000-1.5H4.75a.75.75 0 00-.75.75z"
-          ></path>
-        </svg>
-      </button> */}
-      <aside
-        id="default-sidebar"
-        className="h-screen"
-        aria-label="Sidebar"
-      >
-        <div className="h-full py-4 overflow-y-auto">
-          <ul className="space-y-2 font-medium">
-            {sidebarData.map((item, index) => (
-              <SidebarElement
-                key={index}
-                icon={item.icon}
-                text={item.text}
-                link={item.link}
-                selected={pathname.includes(item.link)}
-              />
-            ))}
-          </ul>
-        </div>
-      </aside>
-    </>
-  );
-}
-
-const sidebarData = [
+const speakerRoutes = [
   {
     icon: (
-
       <path
         d="M6.49992 20.5833H9.74992V14.0833H16.2499V20.5833H19.4999V10.8333L12.9999 5.95833L6.49992 10.8333V20.5833ZM4.33325 22.75V9.75L12.9999 3.25L21.6666 9.75V22.75H14.0833V16.25H11.9166V22.75H4.33325Z"
       />
@@ -71,8 +14,29 @@ const sidebarData = [
         d="M15.7083 19.5C14.95 19.5 14.309 19.2382 13.7854 18.7146C13.2618 18.191 13 17.55 13 16.7917C13 16.0334 13.2618 15.3924 13.7854 14.8688C14.309 14.3452 14.95 14.0834 15.7083 14.0834C16.4667 14.0834 17.1076 14.3452 17.6313 14.8688C18.1549 15.3924 18.4167 16.0334 18.4167 16.7917C18.4167 17.55 18.1549 18.191 17.6313 18.7146C17.1076 19.2382 16.4667 19.5 15.7083 19.5ZM5.41667 23.8334C4.82083 23.8334 4.31076 23.6212 3.88646 23.1969C3.46215 22.7726 3.25 22.2625 3.25 21.6667V6.50002C3.25 5.90419 3.46215 5.39412 3.88646 4.96981C4.31076 4.54551 4.82083 4.33335 5.41667 4.33335H6.5V2.16669H8.66667V4.33335H17.3333V2.16669H19.5V4.33335H20.5833C21.1792 4.33335 21.6892 4.54551 22.1135 4.96981C22.5378 5.39412 22.75 5.90419 22.75 6.50002V21.6667C22.75 22.2625 22.5378 22.7726 22.1135 23.1969C21.6892 23.6212 21.1792 23.8334 20.5833 23.8334H5.41667ZM5.41667 21.6667H20.5833V10.8334H5.41667V21.6667ZM5.41667 8.66669H20.5833V6.50002H5.41667V8.66669Z"
       />
     ),
-    text: "Events",
-    link: "events"
+    text: "Engagements",
+    link: "engagements"
+  },
+];
+
+const adminRoutes = [
+  {
+    icon: (
+      <path
+        d="M6.49992 20.5833H9.74992V14.0833H16.2499V20.5833H19.4999V10.8333L12.9999 5.95833L6.49992 10.8333V20.5833ZM4.33325 22.75V9.75L12.9999 3.25L21.6666 9.75V22.75H14.0833V16.25H11.9166V22.75H4.33325Z"
+      />
+    ),
+    text: "Home",
+    link: "home"
+  },
+  {
+    icon: (
+      <path
+        d="M15.7083 19.5C14.95 19.5 14.309 19.2382 13.7854 18.7146C13.2618 18.191 13 17.55 13 16.7917C13 16.0334 13.2618 15.3924 13.7854 14.8688C14.309 14.3452 14.95 14.0834 15.7083 14.0834C16.4667 14.0834 17.1076 14.3452 17.6313 14.8688C18.1549 15.3924 18.4167 16.0334 18.4167 16.7917C18.4167 17.55 18.1549 18.191 17.6313 18.7146C17.1076 19.2382 16.4667 19.5 15.7083 19.5ZM5.41667 23.8334C4.82083 23.8334 4.31076 23.6212 3.88646 23.1969C3.46215 22.7726 3.25 22.2625 3.25 21.6667V6.50002C3.25 5.90419 3.46215 5.39412 3.88646 4.96981C4.31076 4.54551 4.82083 4.33335 5.41667 4.33335H6.5V2.16669H8.66667V4.33335H17.3333V2.16669H19.5V4.33335H20.5833C21.1792 4.33335 21.6892 4.54551 22.1135 4.96981C22.5378 5.39412 22.75 5.90419 22.75 6.50002V21.6667C22.75 22.2625 22.5378 22.7726 22.1135 23.1969C21.6892 23.6212 21.1792 23.8334 20.5833 23.8334H5.41667ZM5.41667 21.6667H20.5833V10.8334H5.41667V21.6667ZM5.41667 8.66669H20.5833V6.50002H5.41667V8.66669Z"
+      />
+    ),
+    text: "Engagements",
+    link: "engagements"
   },
   {
     icon: (
@@ -84,3 +48,5 @@ const sidebarData = [
     link: "speakers"
   },
 ];
+
+export { speakerRoutes, adminRoutes };
