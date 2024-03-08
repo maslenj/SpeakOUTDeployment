@@ -6,7 +6,7 @@ import ProfileView from "./ProfileView";
 export default async function Profile() {
   const session = await getServerSession(authOptions);
   const sessionUser: any = session?.user;
-  const user = await prisma.user.findUnique({ where: { id: sessionUser.id } });
+  const user = await prisma.user.findUnique({ where: { id: parseInt(sessionUser.id) } });
   if (!user) {
     throw new Error("User not found");
   }
