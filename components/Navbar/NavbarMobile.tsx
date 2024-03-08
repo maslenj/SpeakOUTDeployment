@@ -1,4 +1,3 @@
-import routes from "@/app/(app)/main/routes";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

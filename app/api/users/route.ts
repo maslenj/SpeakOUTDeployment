@@ -10,7 +10,8 @@ const harcoded_accesscode = "speakOutBoston"; // TO DO: CHANGE THE HARCODED ACCE
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions)
-  if (!session || !session.user || session.user.role !== Role.ADMIN) {
+  const sessionUser: any = session?.user;
+  if (!session || !session.user || sessionUser.role !== Role.ADMIN) {
     return new Response(
       JSON.stringify({ error: "Unauthorized" }),
       { status: 401 }
@@ -36,7 +37,8 @@ export async function GET(request: Request) {
 /* Create a New User */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions)
-  if (!session || !session.user || session.user.role !== Role.ADMIN) {
+  const sessionUser: any = session?.user;
+  if (!session || !session.user || sessionUser.role !== Role.ADMIN) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
@@ -89,7 +91,8 @@ export async function PATCH(request: Request) {
   }
 
   const session = await getServerSession(authOptions)
-  if (!session || !session.user || !(session.user.role === Role.ADMIN || session.user.id === user_Id)) {
+  const sessionUser: any = session?.user;
+  if (!session || !session.user || !(sessionUser.role === Role.ADMIN || sessionUser.id === user_Id)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
@@ -133,7 +136,8 @@ export async function PATCH(request: Request) {
 /* Delete an Existing User and its Notifications */
 export async function DELETE(request: Request) {
   const session = await getServerSession(authOptions)
-  if (!session || !session.user || session.user.role !== "ADMIN") {
+  const sessionUser: any = session?.user;
+  if (!session || !session.user || sessionUser.role !== "ADMIN") {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 

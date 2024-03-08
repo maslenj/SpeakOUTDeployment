@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import Typography from "@/components/Typography";
-import { User } from "@/prisma/client";
+import { User } from "@prisma/client";
+
 
 interface Props {
   userData: User,

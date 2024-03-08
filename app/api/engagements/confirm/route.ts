@@ -6,7 +6,8 @@ import { Role } from "@prisma/client";
 
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions)
-    if (!session || !session.user || session.user.role !== Role.ADMIN) {
+    const sessionUser: any = session?.user;
+    if (!session || !session.user || sessionUser.role !== Role.ADMIN) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
     const { userId, engagementId } = await request.json();

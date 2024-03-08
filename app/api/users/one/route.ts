@@ -16,8 +16,8 @@ export async function GET(request: Request) {
     }
 
     const session = await getServerSession(authOptions)
-
-    if (!session || !session.user || !(session.user.role === Role.ADMIN || session.user.id === user_Id)) {
+    const sessionUser: any = session?.user;
+    if (!session || !session.user || !(sessionUser.role === Role.ADMIN || sessionUser.id === user_Id)) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
 

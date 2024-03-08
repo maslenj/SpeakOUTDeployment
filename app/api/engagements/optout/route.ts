@@ -29,6 +29,10 @@ export async function POST(request: Request) {
         },
     });
 
+    if (!engagement) {
+        return new NextResponse("Engagement not found!", { status: 404 });
+    }
+
     // If the user is not a pending or confirmed speaker, return an error
     if (engagement.pendingSpeakers.length === 0 && engagement.confirmedSpeakers.length === 0) {
         return new NextResponse("Not signed up or confirmed for the engagement!", { status: 400 });
@@ -61,22 +65,26 @@ export async function POST(request: Request) {
     // Fetch an Admin User
     const adminUser = await prisma.user.findFirst({
         where: {
-          role: 'ADMIN',
+            role: 'ADMIN',
         },
     });
 
     if (!adminUser) {
         return new NextResponse(JSON.stringify({ error: "No admin user found." }), { status: 404 });
-      }
-  
+    }
+
+    if (!user) {
+        return new NextResponse(JSON.stringify({ error: "User not found." }), { status: 404 });
+    }
+
     // Send a notification for the Admin user    
     const newNotification = await prisma.notification.create({
-    data: {
-        title: `${user.firstname} ${user.lastname} opted out of ${engagement.title}.`,
-        user: {
-            connect: {
-                id: adminUser.id,
-            },
+        data: {
+            title: `${user.firstname} ${user.lastname} opted out of ${engagement.title}.`,
+            user: {
+                connect: {
+                    id: adminUser.id,
+                },
             },
         },
     });

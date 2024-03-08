@@ -20,6 +20,8 @@ export default function BioForm() {
     const [formData, setFormData] = useState<BioData>({})
     const [error, setError] = useState("")
     const { data: session } = useSession()
+    const sessionUser: any = session?.user
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData(formData => {
             return ({
@@ -37,8 +39,8 @@ export default function BioForm() {
         if (!session || !session.user) {
             return
         }
-        console.log(session)
-        fetch('/api/users?id=' + session.user.id, { method: 'PATCH', body: JSON.stringify(formData) })
+        
+        fetch('/api/users?id=' + sessionUser, { method: 'PATCH', body: JSON.stringify(formData) })
             .then(res => res.json())
             .then(data => {
                 if (data.error) {

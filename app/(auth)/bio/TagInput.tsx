@@ -7,14 +7,14 @@ const BACKSPACE = 8;
 export default function TagInput({ tags, setTags }: { tags: string[], setTags: (tags: string[]) => void }) {
   const [value, setValue] = useState("");
 
-  const handleKeyUp = (e) => {
+  const handleKeyUp = (e: { keyCode: any; }) => {
     const key = e.keyCode;
     if (key === ENTER || key === COMMA) {
       addTag();
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: { keyCode: any; }) => {
     const key = e.keyCode;
     if (key === BACKSPACE && !value) {
       editTag();
@@ -28,7 +28,7 @@ export default function TagInput({ tags, setTags }: { tags: string[], setTags: (
     setValue("");
   };
 
-  const editTag = () => setValue(tags.pop());
+  const editTag = () => setValue(tags.pop() || "");
 
   return (
     <>
