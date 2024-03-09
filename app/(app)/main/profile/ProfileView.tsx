@@ -7,12 +7,12 @@ import EditableProfile from "./EditableProfile"
 import { useState } from "react";
 import Button from "@/components/Button";
 import { signOut } from 'next-auth/react'
-import { User } from "@prisma/client";
+import { UserNoPassword } from "@/lib/types";
 
 
-export default function ProfileView({ user } : { user: User }) {
+export default function ProfileView({ user } : { user: UserNoPassword }) {
   const [editable, setEditable] = useState(false);
-  const [userData, setUserData] = useState<User>(user);
+  const [userData, setUserData] = useState<UserNoPassword>(user);
 
   if (!userData) return (<div>Loading...</div>)
 

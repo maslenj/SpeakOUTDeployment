@@ -6,10 +6,11 @@ import { FaRegDotCircle } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 import IdentityTag from '@/components/IdentityTag';
 import { GoLocation } from "react-icons/go";
-import { EngagementWithSpeakers, SpeakerStatus } from '@/lib/types';
+import { SpeakerStatus } from '@/lib/types';
 import PopupModal from './PopupModal';
+import { Engagement } from '@prisma/client';
 
-export default function SpeakerEngagementPopup({ engagement, userId, onClose }: { engagement: EngagementWithSpeakers, userId: number, onClose: () => void }) {
+export default function SpeakerEngagementPopup({ engagement, onClose }: { engagement: Engagement, onClose: () => void }) {
     const { title, location, start, status, description, tags } = engagement;
     const [speakerStatus, setSpeakerStatus] = useState<SpeakerStatus | null>(null);
     useEffect(() => {
@@ -21,14 +22,14 @@ export default function SpeakerEngagementPopup({ engagement, userId, onClose }: 
     const signUp = () => {
         fetch("/api/engagements/signup", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id, userId: userId})
+            body: JSON.stringify({engagementId: engagement.id, userId: 1})
         }).then(res => res.json().then(data => setSpeakerStatus(data.status)))
     }
 
     const optOut = () => {
         fetch("/api/engagements/optout", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id, userId: userId})
+            body: JSON.stringify({engagementId: engagement.id, userId: 1})
         }).then(res => res.json().then(data => console.log(data)))
     }
 

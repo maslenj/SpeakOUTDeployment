@@ -1,11 +1,12 @@
 'use client'
 
+import { UserNoPassword } from '@/lib/types';
 import { User } from '@prisma/client';
 import React, { useState, useEffect} from 'react';
 
-export const EmailSpeakers = (props: { IDs: any; users: User[]; onClose: () => void; }) => {
+export const EmailSpeakers = (props: { IDs: any; users: UserNoPassword[]; onClose: () => void; }) => {
     
-    const [visibleUsers, setVisibleUsers] = useState<User[]>([]);
+    const [visibleUsers, setVisibleUsers] = useState<UserNoPassword[]>([]);
 
     //Finds the users that are selected
     useEffect(() => {

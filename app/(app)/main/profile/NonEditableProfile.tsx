@@ -2,9 +2,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import Typography from "@/components/Typography";
 import EditIcon from "@/components/icons/EditIcon";
 import { User } from "@prisma/client"
+import { UserNoPassword } from '@/lib/types';
 
 interface Props {
-        userData: User,
+        userData: UserNoPassword,
         setEditable: Dispatch<SetStateAction<boolean>>,
 }
 export function NonEditableProfile({ userData, setEditable}: Props) {

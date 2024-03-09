@@ -1,13 +1,9 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import ProfileView from "./ProfileView";
+import { getSelf } from "@/lib/db/utils";
 
 export default async function Profile() {
-  const session = await getServerSession(authOptions);
-  const sessionUser: any = session?.user;
-  const user = await prisma.user.findUnique({ where: { id: parseInt(sessionUser.id) } });
-  if (!user) {
+  const user = await getSelf();
+  if (user == null) {
     throw new Error("User not found");
   }
   return (

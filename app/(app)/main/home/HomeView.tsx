@@ -2,24 +2,13 @@
 
 import { EngagementCard } from "./EngagmentCard";
 import Typography from '@/components/Typography'
-import { useEffect, useState } from "react";
-import { EngagementWithSpeakers } from "@/lib/types";
-import { useSession } from "next-auth/react";
-import { User } from "@prisma/client";
+import { useState } from "react";
+import { EngagementWithSpeakers, UserNoPassword } from "@/lib/types";
+import { Engagement } from "@prisma/client";
 
-export default function HomeView({ user } : { user: User }) {
-    const [engagements, setEngagements] = useState<EngagementWithSpeakers[]>([]);
-    const { data: session } = useSession()
+export default function HomeView({ user, engagementsData } : { user: UserNoPassword, engagementsData: (EngagementWithSpeakers | Engagement)[] }) {
+    const [engagements, setEngagements] = useState<(EngagementWithSpeakers | Engagement)[]>(engagementsData);
 
-    useEffect(() => {
-        const fetchEngagements = async () => {
-            const response = await fetch('/api/engagements');
-            const data = await response.json();
-            setEngagements(data);
-        }
-        fetchEngagements();
-    }, [session])
-    
     return (
         <div className="w-full ml-20">
             <div className="mb-2 mt-5"> <Typography variant="h1" > Welcome, {user?.firstname}! </Typography> </div>
@@ -41,7 +30,6 @@ export default function HomeView({ user } : { user: User }) {
                         return (
                             <div key={engagement.id} className="w-[80%]">
                                 <EngagementCard 
-                                    user={user}
                                     engagement={engagement} 
                                     setEngagement={setEngagement} 
                                 />

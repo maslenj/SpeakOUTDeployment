@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import Typography from "@/components/Typography";
-import { User } from "@prisma/client";
+import { UserNoPassword } from '@/lib/types';
 
 
 interface Props {
-  userData: User,
-  setUserData: Dispatch<SetStateAction<User>>,
+  userData: UserNoPassword,
+  setUserData: Dispatch<SetStateAction<UserNoPassword>>,
   setEditable: Dispatch<SetStateAction<boolean>>,
 }
 

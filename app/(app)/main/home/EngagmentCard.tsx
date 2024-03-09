@@ -3,9 +3,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AdminEngagementPopup } from '@/components/EngagementPopup/AdminEngagementPopup'
 import { formatDate, dateToAMPM } from '@/lib/utils'
-import { EngagementWithSpeakers } from '@/lib/types'
+import { EngagementWithSpeakers, UserNoPassword } from '@/lib/types'
 import ClockIcon from '../../../../components/icons/ClockIcon';
-import { Role, User } from '@prisma/client';
+import { Engagement, Role, User } from '@prisma/client';
 import SpeakerEngagementPopup from '../../../../components/EngagementPopup/SpeakerEngagementPopup';
 
 const renderTimeDate = (date: string, startTime: string, endTime: string) => {
@@ -25,7 +25,7 @@ const renderTimeDate = (date: string, startTime: string, endTime: string) => {
     );
 }
 
-export function EngagementCard({ user, engagement, setEngagement }: { user: User, engagement: EngagementWithSpeakers, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
+export function EngagementCard({ engagement, setEngagement }: { engagement: EngagementWithSpeakers | Engagement, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
     const [isPopupOpen, setPopupOpen] = useState(false);
     const date = formatDate(new Date(engagement.start))
     const startTime = dateToAMPM(new Date(engagement.start))
@@ -42,7 +42,7 @@ export function EngagementCard({ user, engagement, setEngagement }: { user: User
                 {renderTimeDate(date, startTime, endTime)}
             </span>
 
-            {user.role == Role.ADMIN && (
+            {('confirmedSpeakers' in engagement) && (
                 <>
                     {
                         engagement.confirmedSpeakers.length >= engagement.capacity && (
@@ -69,7 +69,7 @@ export function EngagementCard({ user, engagement, setEngagement }: { user: User
             </button>
 
             {isPopupOpen && (
-                user.role == Role.ADMIN ? (
+                ('confirmedSpeakers' in engagement) ? (
                     <AdminEngagementPopup
                         engagement={engagement}
                         setEngagement={setEngagement}
@@ -78,7 +78,6 @@ export function EngagementCard({ user, engagement, setEngagement }: { user: User
                 ) : (
                     <SpeakerEngagementPopup
                         engagement={engagement}
-                        userId={user.id}
                         onClose={() => setPopupOpen(false)}
                     />
                 )
