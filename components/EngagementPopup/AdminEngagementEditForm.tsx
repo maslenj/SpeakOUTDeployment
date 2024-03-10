@@ -2,27 +2,27 @@ import { GoLocation } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
 import DatePicker from "react-datepicker";
 import { EngagementWithSpeakers } from "@/lib/types";
-import Typography from "../Typography";
 import TagInput from "@/app/(auth)/bio/TagInput";
 import StatusDropdown from "./StatusDropdown";
 import ImageUpload from "./ImageUpload";
+import { IoPeopleSharp } from "react-icons/io5";
 
-export default function AdminEngagementEditForm({ engagement, setEngagement } : { engagement: EngagementWithSpeakers, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
+export default function AdminEngagementEditForm({ engagement, setEngagement }: { engagement: EngagementWithSpeakers, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEngagement({ ...engagement, [e.target.name]: e.target.value });
     }
 
     return (
         <>
-            <span className="text-[#380D5A] font-medium my-4"> 
-                <input 
+            <div className="text-[#380D5A] font-medium my-4">
+                <input
                     name="title"
                     placeholder="Title"
                     value={engagement.title}
                     onChange={handleChange}
                     className="text-[#380D5A] font-medium font-serif text-[20px] w-full border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6]"
                 />
-            </span>
+            </div>
             <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
                 <span className="border border-black w-[20%] rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
                     <GoLocation className="pr-1 text-xl" />
@@ -34,11 +34,15 @@ export default function AdminEngagementEditForm({ engagement, setEngagement } : 
                         className="w-full pl-1 pr-1"
                     />
                 </span>
-                <span className="border border-black w-[20%] rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+                <span className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
                     <IoMdTime className="text-xl mr-2" />
                     <DatePicker selected={engagement['start']} onChange={(date: Date) => setEngagement({ ...engagement, start: date })} />
                 </span>
                 <StatusDropdown status={engagement.status} setStatus={(status: string) => { setEngagement({ ...engagement, status: status }) }} />
+                <span className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+                    <IoPeopleSharp />
+                    <input className="ml-2 w-[30px]" type="number" name="capacity" value={engagement.capacity} onChange={handleChange} />
+                </span>
             </div>
             <div>
                 <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-4">Description</span>

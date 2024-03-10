@@ -45,7 +45,7 @@ export default function EngagementsView({ engagemnts, admin }: { engagemnts: (En
             }
             {
                 showCreateEvent &&
-                <AdminEngagementCreate onClose={() => setShowCreateEvent(false)} />
+                <AdminEngagementCreate onClose={() => setShowCreateEvent(false)} setEngagements={setEngagements} />
             }
         </div>
     );

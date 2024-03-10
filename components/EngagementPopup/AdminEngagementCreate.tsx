@@ -1,13 +1,13 @@
 import { AiOutlineClose } from "react-icons/ai";
 import PopupModal from "./PopupModal";
 import AdminEngagementEditForm from "./AdminEngagementEditForm";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { EngagementWithSpeakers } from "@/lib/types";
 import Button from "../Button";
-import { Engagement } from "@prisma/client";
 import Typography from "../Typography";
+import { Engagement } from "@prisma/client";
 
-export default function AdminEngagementCreate({ onClose }: { onClose: () => void }){
+export default function AdminEngagementCreate({ onClose, setEngagements }: { onClose: () => void, setEngagements: Dispatch<SetStateAction<(EngagementWithSpeakers | Engagement)[]>> }){
     const [engagement, setEngagement] = useState<EngagementWithSpeakers>({
         id: 0,
         createdAt: new Date(),
@@ -35,7 +35,10 @@ export default function AdminEngagementCreate({ onClose }: { onClose: () => void
             }
         }).then(res => {
             if (res.ok) {
-                onClose();
+                res.json().then(data => {
+                    setEngagements(engagements => [...engagements, data])
+                    onClose();
+                })
             }
         })
     }

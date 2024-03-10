@@ -9,6 +9,7 @@ import IdentityTag from '../IdentityTag';
 import { EngagementWithSpeakers } from '@/lib/types';
 import { dateToAMPM } from '@/lib/utils';
 import { MdOutlineEditNote } from 'react-icons/md';
+import { IoPeopleSharp } from 'react-icons/io5';
 
 export function AdminEngagementView({ engagement, toggleEditMode }: { engagement: EngagementWithSpeakers, toggleEditMode: () => void }) {
     return (
@@ -28,6 +29,10 @@ export function AdminEngagementView({ engagement, toggleEditMode }: { engagement
                 <span className="flex items-center">
                     <FaRegDotCircle className="pr-1 text-xl" />
                     {engagement.status}
+                </span>
+                <span className="flex items-center">
+                    <IoPeopleSharp className="pr-1 text-xl" />
+                    {engagement.capacity}
                 </span>
             </div>
             <div>
@@ -49,7 +54,7 @@ export function AdminEngagementView({ engagement, toggleEditMode }: { engagement
 
             <div className="grid lg:grid-cols-2 lg:gap-2 xs:grid-cols-1">
                 <div>
-                    <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3">Speakers </span>
+                    <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3">Speakers ({engagement.confirmedSpeakers.length}/{engagement.capacity}) </span>
                     <div className="mt-2 mb-8 flex flex-wrap">
                         {engagement.confirmedSpeakers.map((speaker, index) => (
                             <div key={index} className="m-1">

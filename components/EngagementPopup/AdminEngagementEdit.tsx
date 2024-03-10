@@ -36,7 +36,7 @@ export function AdminEngagementEdit({ engagement, setEngagement, toggleEditMode 
 
             <div className="grid lg:grid-cols-2 lg:gap-2 xs:grid-cols-1">
                 <div>
-                    <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3">Speakers </span>
+                    <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3">Speakers ({engagement.confirmedSpeakers.length}/{engagement.capacity}) </span>
                     <div className="border border-black flex flex-row w-full rounded-xl px-2 py-3 mt-2 mb-8">
                         {engagement.confirmedSpeakers.map((speaker, index) => (
                             <div key={index} className="m-1">
@@ -75,7 +75,7 @@ export function AdminEngagementEdit({ engagement, setEngagement, toggleEditMode 
                 </div>
             </div>
             <div>
-                <div className="flex flex-row justify-end absolute bottom-0 right-0">
+                <div className="flex flex-row justify-end">
                     <button
                         className="bg-white px-3 py-1 rounded-full text-[#1E2A78] border border-black text-med font-sans font-medium mt-10 mb-5 mr-3 flex items-center"
                         onClick={() => { alert("todo") }}>

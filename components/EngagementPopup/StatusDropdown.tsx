@@ -24,7 +24,7 @@ export default function StatusDropdown({ status, setStatus } : { status: string,
                             key={index}
                             className="cursor-pointer px-4 py-2 hover:bg-gray-100"
                             onClick={() => {
-                                setStatus(status)
+                                setStatus(option)
                                 setShowStatusDropdown(false);
                             }}
                         >

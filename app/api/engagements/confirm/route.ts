@@ -42,7 +42,11 @@ export async function POST(request: Request) {
                 pendingSpeakers: {
                     disconnect: [{ id: userId }], // Disconnects the same user from pendingSpeakers
                 },
-            }
+            },
+            include: {
+                confirmedSpeakers: true,
+                pendingSpeakers: true,
+            },
         });
 
         // Send a new notification to the user
@@ -58,8 +62,8 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         console.error(error);
-        return new Response(JSON.stringify(
-            { error: "An unknown error occurred while signing up the user." }), 
+        return new NextResponse(
+            JSON.stringify({ error: "An unknown error occurred while signing up the user." }), 
             { status: 500 }
         );
     }
