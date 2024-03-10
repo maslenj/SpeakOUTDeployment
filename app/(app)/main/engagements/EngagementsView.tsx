@@ -11,7 +11,7 @@ import AdminEngagementCreate from "@/components/EngagementPopup/AdminEngagementC
 import { Engagement } from "@prisma/client";
 import CalendarView from "./CalendarView";
 
-export default function EngagementsView({ engagemnts }: { engagemnts: (EngagementWithSpeakers | Engagement)[] }) {
+export default function EngagementsView({ engagemnts, admin }: { engagemnts: (EngagementWithSpeakers | Engagement)[], admin: boolean}) {
     const [view, setView] = useState<View>("List")
     const [engagements, setEngagements] = useState<(EngagementWithSpeakers | Engagement)[]>(engagemnts)
     const [currentDate, setCurrentDate] = useState<Date>(new Date())
@@ -25,7 +25,7 @@ export default function EngagementsView({ engagemnts }: { engagemnts: (Engagemen
                 </div>
                 <MonthSwitch currentDate={currentDate} setCurrentDate={setCurrentDate} />
                 {
-                    "confirmedSpeakers" in engagements ?
+                    admin ?
                     <Button variant="primary" onClick={() => setShowCreateEvent(true)}> New Event <FaPlusCircle className="inline" /> </Button>
                     :
                     <span></span>
