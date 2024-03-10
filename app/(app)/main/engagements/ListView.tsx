@@ -3,9 +3,9 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import EngagementCard from "./EngagementCard";
 import { EngagementWithSpeakers } from "@/lib/types";
-import { User } from '@prisma/client';
+import { Engagement } from '@prisma/client';
 
-export default function ListView({ user, engagements, setEngagements, currentDate }: { user: User, engagements: EngagementWithSpeakers[], setEngagements: Dispatch<SetStateAction<EngagementWithSpeakers[]>>, currentDate: Date }) {
+export default function ListView({ engagements, setEngagements, currentDate }: { engagements: (EngagementWithSpeakers | Engagement)[], setEngagements: Dispatch<SetStateAction<(EngagementWithSpeakers | Engagement)[]>>, currentDate: Date }) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {engagements.map(engagement => {
@@ -23,7 +23,6 @@ export default function ListView({ user, engagements, setEngagements, currentDat
                 return (
                 new Date(engagement.start).getMonth() === currentDate.getMonth() &&
                 <EngagementCard 
-                    user={user}
                     key={engagement.id} 
                     engagement={engagement} 
                     setEngagement={setEngagement}

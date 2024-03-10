@@ -1,32 +1,44 @@
+import { getSelf } from "@/lib/db/utils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-
+// self only
 export async function POST(request: Request) {
-
+    const user = await getSelf();
+    if (user == null) {
+        return new NextResponse(JSON.stringify({ error: "User not found" }), { status: 404 });
+    }
+    const userId = user.id;
     const body = await request.json();
-    const { engagementId, userId } = body;
+    const { engagementId } = body;
 
-    if (!engagementId || !userId) {
-        return new NextResponse(JSON.stringify({ error: "Missing engagementId or userId!" }), { status: 400 })
+    if (!engagementId) {
+        return new NextResponse(JSON.stringify({ error: "Missing engagementId." }), { status: 400 })
     }
 
     // If the user is already a pending or confirmed speaker, return an error message.
-    // const engagement = await prisma.engagement.findUnique({
-    //     where: { id: engagementId },
-    //     include: {
-    //         pendingSpeakers: {
-    //             where: { id: userId },
-    //         },
-    //         confirmedSpeakers: {
-    //             where: { id: userId },
-    //         },
-    //     },
-    // });
+    const engagementWithSpeakers = await prisma.engagement.findUnique({
+        where: { id: engagementId },
+        include: {
+            pendingSpeakers: {
+                where: { id: userId },
+            },
+            confirmedSpeakers: {
+                where: { id: userId },
+            },
+        },
+    });
+    if (engagementWithSpeakers) {
+        return new NextResponse(
+            JSON.stringify({ error: "User is already signed up for the engagement" }), 
+            { status: 400 }
+        );
+    }
 
+    let updatedEngagement = null;
     try {
         // add the user to pending speakers
-        await prisma.engagement.update({
+        updatedEngagement = await prisma.engagement.update({
             where: { id: engagementId },
             data: {
                 pendingSpeakers: {
@@ -38,35 +50,28 @@ export async function POST(request: Request) {
         return new NextResponse(JSON.stringify({ error: "An unknown error occurred while signing up the user." }), { status: 400 })
     }
 
-    // Fetch the user who opted out
-    // const user = await prisma.user.findUnique({
-    //     where: {
-    //         id: userId,
-    //     },
-    // });
-
     // Fetch an Admin User
-    // const adminUser = await prisma.user.findFirst({
-    //     where: {
-    //         role: 'ADMIN',
-    //     },
-    // });
+    const adminUser = await prisma.user.findFirst({
+        where: {
+            role: 'ADMIN',
+        },
+    });
 
-    // if (!adminUser) {
-    //     return new NextResponse(JSON.stringify({ error: "No admin user found." }), { status: 404 });
-    // }
+    if (adminUser == null) {
+        return new NextResponse(JSON.stringify({ error: "No admin user found" }), { status: 500 });
+    }
 
     // Send a notification for the Admin user    
-    // const newNotification = await prisma.notification.create({
-    //     data: {
-    //         title: `${user.firstname} ${user.lastname} signed up for ${engagement.title}.`,
-    //         user: {
-    //             connect: {
-    //                 id: adminUser.id,
-    //             },
-    //         },
-    //     },
-    // });
+    await prisma.notification.create({
+        data: {
+            title: `${user.firstname} ${user.lastname} signed up for ${updatedEngagement.title}.`,
+            user: {
+                connect: {
+                    id: adminUser.id,
+                },
+            },
+        },
+    });
 
     return new NextResponse(JSON.stringify({ status: "pending" }), { status: 200 });
 }

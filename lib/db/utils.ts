@@ -4,7 +4,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { UserNoPassword, userNoPasswordFields } from "../types";
 
 export const isAdmin = async () => {
-    const authOptions = {}; // Define the authOptions variable
     const session = await getServerSession(authOptions);
     const sessionUser: any = session?.user;
     if (!session || !session.user || sessionUser.role !== "ADMIN") {

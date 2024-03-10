@@ -3,15 +3,15 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AdminEngagementPopup } from '@/components/EngagementPopup/AdminEngagementPopup';
 import { EngagementWithSpeakers } from '@/lib/types';
-import { User } from '@prisma/client';
+import { Engagement, User } from '@prisma/client';
 import SpeakerEngagementPopup from '@/components/EngagementPopup/SpeakerEngagementPopup';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const totalDays = 42;
 const days = Array.from({ length: totalDays }, (_, i) => i + 1);
 
-function convertEngagementsToEngagementData(engagements: EngagementWithSpeakers[]): Record<string, EngagementWithSpeakers[]> {
-  const engagementData: Record<string, EngagementWithSpeakers[]> = {};
+function convertEngagementsToEngagementData(engagements: (EngagementWithSpeakers | Engagement)[]): Record<string, (EngagementWithSpeakers | Engagement)[]> {
+  const engagementData: Record<string, (EngagementWithSpeakers | Engagement)[]> = {};
   engagements.forEach(engagement => {
     const startDate = new Date(engagement.start);
     const dateKey = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).toDateString();
@@ -23,8 +23,8 @@ function convertEngagementsToEngagementData(engagements: EngagementWithSpeakers[
   return engagementData;
 }
 
-const Calendar = ({ user, currentDate, engagements, setEngagements }: { user: User, currentDate: Date, engagements: EngagementWithSpeakers[], setEngagements: Dispatch<SetStateAction<EngagementWithSpeakers[]>> }) => {
-  const [selectedEngagement, setSelectedEngagement] = useState<EngagementWithSpeakers | null>(null);
+const CalendarView = ({ currentDate, engagements, setEngagements }: { currentDate: Date, engagements: (EngagementWithSpeakers | Engagement)[], setEngagements: Dispatch<SetStateAction<(EngagementWithSpeakers | Engagement)[]>> }) => {
+  const [selectedEngagement, setSelectedEngagement] = useState<EngagementWithSpeakers | Engagement | null>(null);
 
   let year = currentDate.getFullYear();
   let month = currentDate.getMonth();
@@ -60,7 +60,7 @@ const Calendar = ({ user, currentDate, engagements, setEngagements }: { user: Us
       </div>
 
       {selectedEngagement &&
-        (user.role === "ADMIN" ?
+        ("confirmedSpeakers" in selectedEngagement ?
         <AdminEngagementPopup
           engagement={selectedEngagement}
           setEngagement={(engagement: EngagementWithSpeakers) => {
@@ -78,7 +78,6 @@ const Calendar = ({ user, currentDate, engagements, setEngagements }: { user: Us
         />
         :
         <SpeakerEngagementPopup
-          userId={user.id}
           engagement={selectedEngagement}
           onClose={() => { setSelectedEngagement(null) }}
         />)
@@ -86,4 +85,4 @@ const Calendar = ({ user, currentDate, engagements, setEngagements }: { user: Us
     </>
   );
 };
-export default Calendar;
+export default CalendarView;

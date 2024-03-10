@@ -1,9 +1,16 @@
+import { getSelf } from "@/lib/db/utils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+// self only
 export async function POST(request: Request) {
+    const user = await getSelf()
+    if (user == null) {
+        return new NextResponse(JSON.stringify({ error: "User not found" }), { status: 404 });
+    }
+    const userId = user.id;
     const body = await request.json();
-    const { userId, engagementId } = body;
+    const { engagementId } = body;
 
     // Check for missing parameters
     if (!engagementId || !userId) {
@@ -30,7 +37,10 @@ export async function POST(request: Request) {
     });
 
     if (!engagement) {
-        return new NextResponse("Engagement not found!", { status: 404 });
+        return new NextResponse(
+            JSON.stringify({ error: "Engagement not found!" }), 
+            { status: 404 }
+        );
     }
 
     // If the user is not a pending or confirmed speaker, return an error
@@ -55,13 +65,6 @@ export async function POST(request: Request) {
         return new NextResponse(JSON.stringify({ error: "Error in opting out of the event." }), { status: 401 });
     }
 
-    // Fetch the user who opted out
-    const user = await prisma.user.findUnique({
-        where: {
-            id: userId,
-        },
-    });
-
     // Fetch an Admin User
     const adminUser = await prisma.user.findFirst({
         where: {
@@ -70,15 +73,14 @@ export async function POST(request: Request) {
     });
 
     if (!adminUser) {
-        return new NextResponse(JSON.stringify({ error: "No admin user found." }), { status: 404 });
-    }
-
-    if (!user) {
-        return new NextResponse(JSON.stringify({ error: "User not found." }), { status: 404 });
+        return new NextResponse(
+            JSON.stringify({ error: "No admin user found." }), 
+            { status: 404 }
+        );
     }
 
     // Send a notification for the Admin user    
-    const newNotification = await prisma.notification.create({
+    await prisma.notification.create({
         data: {
             title: `${user.firstname} ${user.lastname} opted out of ${engagement.title}.`,
             user: {

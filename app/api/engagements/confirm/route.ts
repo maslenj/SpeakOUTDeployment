@@ -1,14 +1,11 @@
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
-import { Role } from "@prisma/client";
+import { isAdmin } from "@/lib/db/utils";
 
+// admin only
 export async function POST(request: Request) {
-    const session = await getServerSession(authOptions)
-    const sessionUser: any = session?.user;
-    if (!session || !session.user || sessionUser.role !== Role.ADMIN) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    if (!(await isAdmin())) {
+        return new NextResponse(null, { status: 401 });
     }
     const { userId, engagementId } = await request.json();
 
@@ -26,13 +23,14 @@ export async function POST(request: Request) {
             pendingSpeakers: true,
         }
     });
-
     if (!engagementWithPendingSpeaker) {
-        return new Response(JSON.stringify({ error: "User is either already confirmed or not signed up!" }), { status: 401 });
+        return new Response(
+            JSON.stringify({ error: "The provided user in not a pending speaker for the provided event." }), 
+            { status: 400 }
+        );
     }
 
     let engagement = null
-
     try {
         // remove from pendingSpeakers and add to confirmedSpeakers
         engagement = await prisma.engagement.update({
@@ -44,10 +42,6 @@ export async function POST(request: Request) {
                 pendingSpeakers: {
                     disconnect: [{ id: userId }], // Disconnects the same user from pendingSpeakers
                 },
-            },
-            include: {
-                confirmedSpeakers: true,
-                pendingSpeakers: true,
             }
         });
 
@@ -62,16 +56,13 @@ export async function POST(request: Request) {
                 },
             },
         });
-
     } catch (error) {
         console.error(error);
-        return new Response(JSON.stringify({ error: "User in user sign up!" }), { status: 500 });
+        return new Response(JSON.stringify(
+            { error: "An unknown error occurred while signing up the user." }), 
+            { status: 500 }
+        );
     }
 
     return new NextResponse(JSON.stringify({ updatedEngagement: engagement }), { status: 200 });
 }
-
-
-
-
-

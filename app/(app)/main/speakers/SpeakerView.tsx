@@ -141,7 +141,7 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
             {users.length} Speakers
           </div>
         </div>
-        <div className=" ml-[5%]">
+        <div className="ml-[5%]">
           {users.length > 0 ? (
             users.map(user => {
               //console.log('Iterating through user:', user); 

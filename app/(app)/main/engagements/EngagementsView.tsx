@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import ListView from "./ListView";
 import MonthSwitch from "@/components/MonthSwitch";
 import Button from "@/components/Button";
-import Calendar from "./CalendarView";
 import ViewSelector, { View } from "./ViewSelector";
 import { FaPlusCircle } from "react-icons/fa";
 import { EngagementWithSpeakers } from "@/lib/types";
 import AdminEngagementCreate from "@/components/EngagementPopup/AdminEngagementCreate";
-import { User } from "@prisma/client";
+import { Engagement } from "@prisma/client";
+import CalendarView from "./CalendarView";
 
-export default function EngagementsView({ engagemnts, user }: { engagemnts: (EngagementWithSpeakers)[], user: User }) {
+export default function EngagementsView({ engagemnts }: { engagemnts: (EngagementWithSpeakers | Engagement)[] }) {
     const [view, setView] = useState<View>("List")
-    const [engagements, setEngagements] = useState<EngagementWithSpeakers[]>(engagemnts)
+    const [engagements, setEngagements] = useState<(EngagementWithSpeakers | Engagement)[]>(engagemnts)
     const [currentDate, setCurrentDate] = useState<Date>(new Date())
     const [showCreateEvent, setShowCreateEvent] = useState(false)
 
@@ -25,7 +25,7 @@ export default function EngagementsView({ engagemnts, user }: { engagemnts: (Eng
                 </div>
                 <MonthSwitch currentDate={currentDate} setCurrentDate={setCurrentDate} />
                 {
-                    user.role === "ADMIN" ?
+                    "confirmedSpeakers" in engagements ?
                     <Button variant="primary" onClick={() => setShowCreateEvent(true)}> New Event <FaPlusCircle className="inline" /> </Button>
                     :
                     <span></span>
@@ -33,13 +33,11 @@ export default function EngagementsView({ engagemnts, user }: { engagemnts: (Eng
             </div>
             {view === "List" ?
                 <ListView
-                    user={user}
                     currentDate={currentDate}
                     engagements={engagements}
                     setEngagements={setEngagements}
                 /> :
-                <Calendar
-                    user={user}
+                <CalendarView
                     currentDate={currentDate}
                     engagements={engagements}
                     setEngagements={setEngagements}

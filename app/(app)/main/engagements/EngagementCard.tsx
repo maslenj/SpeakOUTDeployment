@@ -8,10 +8,10 @@ import { dateToAMPM } from '@/lib/utils'
 import { AdminEngagementPopup } from '@/components/EngagementPopup/AdminEngagementPopup'
 import { useState } from 'react'
 import { EngagementWithSpeakers } from '@/lib/types'
-import { Role, User } from '@prisma/client'
+import { Engagement, Role, User } from '@prisma/client'
 import SpeakerEngagementPopup from '@/components/EngagementPopup/SpeakerEngagementPopup'
 
-export default function EngagementCard({ user, engagement, setEngagement }: { user: User, engagement: EngagementWithSpeakers, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
+export default function EngagementCard({ engagement, setEngagement }: { engagement: (EngagementWithSpeakers | Engagement), setEngagement: (engagement: EngagementWithSpeakers) => void }) {
     const startDate = new Date(engagement.start)
     const endDate = new Date(engagement.end)
     const startTime: string = dateToAMPM(startDate)
@@ -35,7 +35,7 @@ export default function EngagementCard({ user, engagement, setEngagement }: { us
                 <Button variant="secondary" onClick={() => setShowEngagment(true)}>Details</Button>
             </div>
             {showEngagement &&
-                (user.role == "ADMIN" ?
+                ("confirmedSpeakers" in engagement ?
                 <AdminEngagementPopup
                     engagement={engagement}
                     setEngagement={setEngagement}
@@ -43,7 +43,6 @@ export default function EngagementCard({ user, engagement, setEngagement }: { us
                 />
                 :
                 <SpeakerEngagementPopup
-                    userId={user.id}
                     engagement={engagement}
                     onClose={() => { setShowEngagment(false) }}
                 />)

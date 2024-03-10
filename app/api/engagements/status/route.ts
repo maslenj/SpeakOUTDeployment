@@ -1,11 +1,13 @@
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
+import { getSelf } from "@/lib/db/utils";
 
+// Self only
 export async function GET(request: Request) {
-    const session = await getServerSession(authOptions)
-    const user : any = session?.user
+    const user = await getSelf()
+    if (user == null) {
+        return new NextResponse(JSON.stringify({ error: "User not found" }), { status: 404 })
+    }
     const userId = user.id
     const { searchParams } = new URL(request.url)
     const engagementId = searchParams.get('id')
@@ -24,7 +26,10 @@ export async function GET(request: Request) {
     })
 
     if (engagement == null) {
-        return new NextResponse(JSON.stringify({error: "No engagement found with the provided id: " + engagement}), { status: 400 })
+        return new NextResponse(
+            JSON.stringify({error: "No engagement found with the provided id: " + engagement}), 
+            { status: 400 }
+        )
     }
 
     if (engagement.pendingSpeakers.some(speaker => (speaker.id == userId))) {

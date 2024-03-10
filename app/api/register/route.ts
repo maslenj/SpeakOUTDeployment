@@ -5,7 +5,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const harcoded_accesscode = "speakOutBoston"; // TO DO: CHANGE THE HARCODED ACCESSCODE
 
-/* Create a New User */
+// open access
 export async function POST(request: Request) {
     const body = await request.json();
     const { email, password, accesscode } = body;

@@ -18,6 +18,7 @@ export default function EditableProfile({ userData, setUserData, setEditable }: 
       })
     })
   }
+  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -37,14 +38,17 @@ export default function EditableProfile({ userData, setUserData, setEditable }: 
       }));
     }
   };
+
+  const updateUser = async () => {
+    await fetch("/api/profile", { method: "PATCH", body: JSON.stringify(userData) })
+    setEditable(false)
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between my-4 text-[#1E2A78] font-semibold">
         <Typography variant="h3">Account Settings</Typography>
-        <button className="flex items-center" onClick={() => {
-          fetch("/api/users?id=" + userData.id, { method: "PATCH", body: JSON.stringify(userData) })
-          setEditable(false)
-        }}>
+        <button className="flex items-center" onClick={updateUser}>
           <div className="rounded-full bg-[#7481D6] font-light text-white flex items-center justify-center px-8 py-[6px] hover:bg-[#6574d8]">
             <div>
               <Typography variant="p1">Done</Typography>

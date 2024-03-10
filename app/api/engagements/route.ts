@@ -3,76 +3,61 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { Role } from "@prisma/client";
+import { isAdmin } from "@/lib/db/utils";
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/library";
 
-
-export async function GET(request: Request) {
-    const engagements = await prisma.engagement.findMany({
-        include: {
-            confirmedSpeakers: true, // Include the confirmed speakers in the response
-            pendingSpeakers: true, // Include the pending speakers in the response
-        },
-    });
-    return NextResponse.json(engagements);
-}
-
+// admin only
 export async function POST(request: Request) {
-    const session = await getServerSession(authOptions)
-    const user = session?.user as any;
-    if (user == null || user.role != 'ADMIN') {
+    if (!(await isAdmin())) {
         return new NextResponse(null, { status: 401 });
     }
 
     const body = await request.json();
-    await prisma.engagement.create({
-        data: body
-    })
-
-    return NextResponse.json({});
-
+    let newEngagement = null;
+    try {
+        newEngagement = await prisma.engagement.create({
+            data: body
+        })
+    } catch (error) {
+        if (error instanceof PrismaClientValidationError || error instanceof PrismaClientKnownRequestError) {
+            return new NextResponse(
+                JSON.stringify({ error: "Invalid data format." }),
+                { status: 400 }
+            );
+        }
+        return new NextResponse(
+            JSON.stringify({ error: "An unknown error occurred while creating the user." }), 
+            {status: 500}
+        );
+    }
+    return new NextResponse(JSON.stringify(newEngagement), { status: 200 });
 }
 
+// admin only
 export async function PATCH(request: Request) {
-
-    const session = await getServerSession(authOptions)
-    const user = session?.user as any;
-    if (user == null || user.role != Role.ADMIN) {
+    if (!(await isAdmin())) {
         return new NextResponse(null, { status: 401 });
     }
 
-    // Grabbing the JSON file from the request.
-    const body = await request.json();
-
-    // Creating a type URL searchParams variable
     const { searchParams } = new URL(request.url)
     const engagementId = searchParams.get('id')
-
     if (!engagementId) {
-        return new NextResponse(JSON.stringify({ error: "Missing engagementId" }), { status: 400 });
+        return new NextResponse(
+            JSON.stringify({ error: "Missing engagementId" }), 
+            { status: 400 }
+        );
     }
+    const body = await request.json();
 
-
-    // // Retrieve current speakers before update
-    // const engagement = await prisma.engagement.findUnique({
-    //     where: { id: Number(engagementId) },
-    //     include: {
-    //         pendingSpeakers: true,
-    //         confirmedSpeakers: true,
-    //     },
-    // });
-
-    // if (!engagement) {
-    //     return new NextResponse(JSON.stringify({ error: "Engagement not found." }), { status: 404 });
-    // }
+    let newEngagement = null;
     try {
-        // Update the engagement
-        await prisma.engagement.update({
+        newEngagement = await prisma.engagement.update({
             where: { id: Number(engagementId) },
             data: body,
         });
     } catch {
         return new NextResponse(JSON.stringify({ error: "Error in engagement update." }), { status: 404 });
     }
-
 
     // // Function to create notifications for a list of users
     // async function createNotificationsForUsers(users, engagementTitle) {
@@ -97,31 +82,30 @@ export async function PATCH(request: Request) {
     //     return new NextResponse(JSON.stringify({ error: "Error in sending notifcations to the users." }), { status: 404 });
     // }
 
-
-    return new NextResponse("success!", { status: 200 });
+    return new NextResponse(JSON.stringify(newEngagement), { status: 200 });
 
 }
 
+// admin only
 export async function DELETE(request: Request) {
-
-    const session = await getServerSession(authOptions)
-    const user = session?.user as any;
-    if (user == null || user.role != 'ADMIN') {
+    if (!(await isAdmin())) {
         return new NextResponse(null, { status: 401 });
     }
 
     // Creating a type URL searchParams variable
     const { searchParams } = new URL(request.url)
-    const engagementID = searchParams.get('engagementID')
+    const engagementID = searchParams.get('id')
 
     try {
-        await prisma.engagement.delete({
+        const deletedEngagement = await prisma.engagement.delete({
             where: { id: Number(engagementID) }
         });
-
-        return new Response(null, { status: 204 });
+        return new Response(JSON.stringify(deletedEngagement), { status: 200 });
     } catch (error) {
-        return new Response(null, { status: 400 });
+        return new Response(JSON.stringify(
+            { error: "An unknown error occurred while trying to delete the user." }), 
+            { status: 400 }
+        );
     }
 }
 
