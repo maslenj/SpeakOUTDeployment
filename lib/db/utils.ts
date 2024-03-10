@@ -14,7 +14,7 @@ export const isAdmin = async () => {
 
 export const getUsers = async () => {
     if (!(await isAdmin())) {
-        return null;
+        return [];
     }
     const users = await prisma.user.findMany({
         select: userNoPasswordFields,
