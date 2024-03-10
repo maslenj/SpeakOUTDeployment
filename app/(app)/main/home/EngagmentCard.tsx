@@ -46,7 +46,7 @@ export function EngagementCard({ engagement, setEngagement }: { engagement: Enga
                 <>
                     {
                         engagement.confirmedSpeakers.length >= engagement.capacity && (
-                            <div className="mx-4 w-20 text-center py-1 border rounded-full bg-purple-800 text-white">
+                            <div className="mx-4 w-20 text-center py-1 border rounded-full bg-purple-800 text-white hidden sm:block">
                                 FULL
                             </div>
                         )
@@ -55,7 +55,7 @@ export function EngagementCard({ engagement, setEngagement }: { engagement: Enga
                         {
                             engagement.pendingSpeakers.map((speaker) => {
                                 return (
-                                    <img key={speaker.id} className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src={speaker.image} alt="Image Description" />
+                                    <img key={speaker.id} className="hidden sm:inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src={speaker.image} alt="Image Description" />
                                 )
                             }
                             )

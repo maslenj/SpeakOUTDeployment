@@ -10,7 +10,7 @@ export default function HomeView({ user, engagementsData } : { user: UserNoPassw
     const [engagements, setEngagements] = useState<(EngagementWithSpeakers | Engagement)[]>(engagementsData);
 
     return (
-        <div className="w-full ml-20">
+        <div className="w-full pl-20">
             <div className="mb-2 mt-5"> <Typography variant="h1" > Welcome, {user?.firstname}! </Typography> </div>
             <div className="my-4"><Typography variant="h2" > Upcoming Engagements</Typography></div>
             <div className="grid grid-cols-1 gap-4">
