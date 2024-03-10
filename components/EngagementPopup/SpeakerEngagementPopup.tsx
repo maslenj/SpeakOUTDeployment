@@ -22,14 +22,14 @@ export default function SpeakerEngagementPopup({ engagement, onClose }: { engage
     const signUp = () => {
         fetch("/api/engagements/signup", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id, userId: 1})
+            body: JSON.stringify({engagementId: engagement.id})
         }).then(res => res.json().then(data => setSpeakerStatus(data.status)))
     }
 
     const optOut = () => {
         fetch("/api/engagements/optout", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id, userId: 1})
+            body: JSON.stringify({engagementId: engagement.id})
         }).then(res => res.json().then(data => console.log(data)))
     }
 

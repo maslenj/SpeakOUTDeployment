@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     // If the user is already a pending or confirmed speaker, return an error message.
-    const engagementWithSpeakers = await prisma.engagement.findUnique({
+    const engagement = await prisma.engagement.findUnique({
         where: { id: engagementId },
         include: {
             pendingSpeakers: {
@@ -28,17 +28,16 @@ export async function POST(request: Request) {
             },
         },
     });
-    if (engagementWithSpeakers) {
+    if (engagement?.pendingSpeakers.length || engagement?.confirmedSpeakers.length) {
         return new NextResponse(
             JSON.stringify({ error: "User is already signed up for the engagement" }), 
             { status: 400 }
         );
     }
 
-    let updatedEngagement = null;
     try {
         // add the user to pending speakers
-        updatedEngagement = await prisma.engagement.update({
+         await prisma.engagement.update({
             where: { id: engagementId },
             data: {
                 pendingSpeakers: {
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
     // Send a notification for the Admin user    
     await prisma.notification.create({
         data: {
-            title: `${user.firstname} ${user.lastname} signed up for ${updatedEngagement.title}.`,
+            title: `${user.firstname} ${user.lastname} signed up for ${engagement?.title}.`,
             user: {
                 connect: {
                     id: adminUser.id,

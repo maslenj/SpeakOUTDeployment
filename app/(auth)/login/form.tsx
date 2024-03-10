@@ -13,7 +13,7 @@ interface LoginData {
 export const LoginForm = () => {
     const router = useRouter()
     const callbackUrl = '/main/home'
-    const [formData, setFormData] = useState<LoginData>({})
+    const [formData, setFormData] = useState<LoginData>({email: '', password: ''})
     const [error, setError] = useState("")
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(formData => {
