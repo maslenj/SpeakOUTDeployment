@@ -1,5 +1,3 @@
-"use client"
-
 import SpeakerView from "./SpeakerView"
 import { getUsers } from "@/lib/db/utils";
 

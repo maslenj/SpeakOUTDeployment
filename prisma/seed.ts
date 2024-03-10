@@ -1,7 +1,7 @@
 // Import necessary dependencies and functions
 import { User } from '@/components/User';
 import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 
 // Create an instance of PrismaClient
 const prisma = new PrismaClient();

@@ -16,6 +16,7 @@
     "@vercel/postgres": "^0.5.1",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.3.2",
     "clsx": "^2.0.0",
@@ -31,6 +32,7 @@
     "tailwind-merge": "^2.1.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-datepicker": "^6.0.3",
