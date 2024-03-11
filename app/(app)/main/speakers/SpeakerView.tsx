@@ -1,13 +1,27 @@
 "use client"
 
 import SpeakerCard from "@/components/SpeakerCard"
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { EmailSpeakers } from '@/components/EmailSpeakers';
 import { UserNoPassword } from "@/lib/types";
+import InviteSpeakersPopup from "./InviteSpeakersPopup";
+
+function Button({ onClick, children }: { onClick: () => void, children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-sm border border-solid border-indigo-800 text-indigo-800 font-bold font-sans rounded-full hover:bg-gray-200 bg-white p-3 m-2"
+    >
+      {children}
+    </button>
+  );
+}
 
 export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]); // Array to store the IDs of selected users
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [isEmailPopupVisible, setEmailPopupVisible] = useState(false);
+  const [isInvitePopupVisible, setInvitePopupVisible] = useState(false);
   const [selectall, setSelectAll] = useState(true);
 
   const handleUserSelection = (userId: number) => {
@@ -54,6 +68,12 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
     }
     setSelectAll(true);
   };
+
+  const handleInviteUsers = async () => {
+    fetch('/api/users/invite', {
+      method: "POST",
+    })
+  }
 
   const handleDeleteUsers = async () => {
     try {
@@ -102,40 +122,43 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
     }
   };
 
-
-
-
   return (
     <>
-      <main>
-        <div className="mt-[40px] ml-[90px]">
-          <div className="text-4xl text-indigo-800 font-serif font-semibold">
-            Speakers
-            <button
-              type="button"
-              className="ml-[7%] mt-[5%] text-sm border border-solid border-indigo-800 text-indigo-800 font-bold font-sans rounded-full hover:bg-gray-200 bg-white w-[12%] h-[40px]"
-              onClick={handleEmailButtonClick}  >
-              Email
-            </button>
-            {selectall ?
-              (<button
-                type="button"
-                className="ml-[0.5%] mt-[5%] text-sm border border-solid border-indigo-800 text-indigo-800 font-bold font-sans rounded-full hover:bg-gray-200 bg-white w-[12%] h-[40px]"
-                onClick={handleSelectAllButtonClick}  >
-                Select All
-              </button>) :
-              (<button
-                type="button"
-                className="ml-[0.5%] mt-[5%] text-sm border border-solid border-indigo-800 text-indigo-800 font-bold font-sans rounded-full hover:bg-gray-200 bg-white w-[12%] h-[40px]"
-                onClick={handleDeSelectAllButtonClick}  >
-                Deselect All
-              </button>)}
-            <button
-              type="button"
-              className="ml-[0.5%] mt-[5%] text-sm border border-solid border-indigo-800 text-indigo-800 font-bold font-sans rounded-full hover:bg-gray-200 bg-white w-[12%] h-[40px]"
-              onClick={handleDeleteUsers}>
-              Delete User
-            </button>
+      <main className="p-5">
+        <div >
+          <div className="flex justify-between">
+            <span className="text-4xl text-indigo-800 font-serif font-semibold">
+              Speakers
+            </span>
+
+            <span>
+              <Button
+                onClick={handleEmailButtonClick}
+              >
+                Email
+              </Button>
+              {selectall ?
+                (<Button
+                  onClick={handleSelectAllButtonClick}
+                >
+                  Select All
+                </Button>) :
+                (<Button
+                  onClick={handleDeSelectAllButtonClick}
+                >
+                  Deselect All
+                </Button>)}
+              <Button
+                onClick={handleDeleteUsers}
+              >
+                Delete User
+              </Button>
+              <Button
+                onClick={() => setInvitePopupVisible(true)}
+              >
+                Invite Users
+              </Button>
+            </span>
           </div>
           <div className="ml-[20px] text-lg text-black font-medium">
             {users.length} Speakers
@@ -144,23 +167,14 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
         <div className="ml-[5%]">
           {users.length > 0 ? (
             users.map(user => {
-              //console.log('Iterating through user:', user); 
               return (
-                <div key={user.id} className="w-[70%] min-w-[500px]">
-                  <div>
                     <SpeakerCard
-                      ID={user.id}
-                      image={user.image}
-                      name={user.firstname + " " + user.lastname}
-                      email={user.email}
-                      pronouns={user.pronouns}
-                      status="Verified"
+                      key={user.id}
+                      speaker={user}
                       isSelected={selectedUsers.includes(user.id)}
                       onSelect={() => handleUserSelection(user.id)}
                       users={users}
                     />
-                  </div>
-                </div>
               );
             })
           ) : (
@@ -175,6 +189,14 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
           onClose={handleCloseEmailPopup}
         />
       )}
+
+      {
+        isInvitePopupVisible && (
+          <InviteSpeakersPopup
+            onClose={() => setInvitePopupVisible(false)}
+          />
+        )
+      }
 
     </>
   )

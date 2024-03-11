@@ -3,15 +3,23 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-const harcoded_accesscode = "speakOutBoston"; // TO DO: CHANGE THE HARCODED ACCESSCODE
-
 // open access
 export async function POST(request: Request) {
     const body = await request.json();
     const { email, password, accesscode } = body;
 
-    if (accesscode != harcoded_accesscode) {
-        return new NextResponse(JSON.stringify({error: "Access code is not valid. Please submit a valid access code."}), { status: 400 });
+    // Check if the access code is valid.
+    const invite = await prisma.invite.findFirst({
+        where: {
+            code: accesscode,
+        },
+    });
+
+    if (!invite) {
+        return new NextResponse(
+            JSON.stringify({error: "Access code is not valid. Please submit a valid access code."}), 
+            { status: 400 }
+        );
     }
 
     // Hash the user's password.
@@ -37,6 +45,12 @@ export async function POST(request: Request) {
             { status: 500 }
         )
     }
+    // delete invite
+    await prisma.invite.delete({
+        where: {
+            id: invite.id,
+        },
+    });
     return new NextResponse(
         JSON.stringify({ message:  "success" }), 
         { status: 200 }

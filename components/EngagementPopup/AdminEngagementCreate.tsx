@@ -44,11 +44,7 @@ export default function AdminEngagementCreate({ onClose, setEngagements }: { onC
     }
 
     return (
-        <PopupModal>
-            <div className="flex justify-end">
-                <AiOutlineClose className="cursor-pointer" onClick={onClose} />
-            </div>
-
+        <PopupModal onClose={onClose}>
             <Typography variant="h2">Create New Event</Typography>
 
             <AdminEngagementEditForm engagement={engagement} setEngagement={setEngagement}/>
