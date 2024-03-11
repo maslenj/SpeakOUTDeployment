@@ -1,5 +1,4 @@
 // Import necessary dependencies and functions
-import { User } from '@/components/User';
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
