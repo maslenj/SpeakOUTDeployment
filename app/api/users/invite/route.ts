@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     if (!(await isAdmin())) {
         return new NextResponse(null, { status: 401 });
     }
-    const { email } = await request.json();
+    const { email, message } = await request.json();
     if (!email) {
         return new NextResponse(
             JSON.stringify({ error: "No email provided for invitation!" }),
@@ -31,6 +31,6 @@ export async function POST(request: Request) {
             code: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
         },
     });
-    sendInviteEmail(email, invite.code);
+    sendInviteEmail(email, message, invite.code);
     return new NextResponse(JSON.stringify(invite), { status: 200 });
 }

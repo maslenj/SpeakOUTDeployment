@@ -18,16 +18,8 @@ export function AdminEngagementPopup({ engagement, setEngagement, onClose }: { e
         setEditMode(editMode => !editMode);
     };
 
-    const handleClose = () => {
-        onClose();
-    };
-
     return (
-        <PopupModal>
-            <div className="flex justify-end">
-                <AiOutlineClose className="cursor-pointer" onClick={handleClose} />
-            </div>
-
+        <PopupModal onClose={onClose}>
             <div>
                 {editMode ? (
                     <AdminEngagementEdit engagement={engagement} setEngagement={setEngagement} toggleEditMode={toggleEditMode} />
