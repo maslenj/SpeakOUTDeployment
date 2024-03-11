@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Typography from '@/components/Typography';
 import { IoMdTime } from "react-icons/io";
 import { FaRegDotCircle } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai";
 import IdentityTag from '@/components/IdentityTag';
 import { GoLocation } from "react-icons/go";
 import { SpeakerStatus } from '@/lib/types';
@@ -33,16 +32,8 @@ export default function SpeakerEngagementPopup({ engagement, onClose }: { engage
         }).then(res => res.json().then(data => console.log(data)))
     }
 
-    const handleClose = () => {
-        onClose();
-    };
-
     return (
-        <PopupModal>
-            <div className="flex justify-end">
-                <AiOutlineClose className="cursor-pointer" onClick={handleClose} />
-            </div>
-
+        <PopupModal onClose={onClose}>
             <span className="text-[#380D5A] font-medium"> <Typography variant="h2">{title}</Typography></span>
 
             <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
