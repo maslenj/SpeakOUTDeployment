@@ -7,7 +7,7 @@ import Button from "../Button";
 import Typography from "../Typography";
 import { Engagement } from "@prisma/client";
 
-export default function AdminEngagementCreate({ onClose, setEngagements }: { onClose: () => void, setEngagements: Dispatch<SetStateAction<(EngagementWithSpeakers | Engagement)[]>> }){
+export default function AdminEngagementCreate({ onClose, setEngagements }: { onClose: () => void, setEngagements: Dispatch<SetStateAction<(EngagementWithSpeakers | Engagement)[]>> }) {
     const [engagement, setEngagement] = useState<EngagementWithSpeakers>({
         id: 0,
         createdAt: new Date(),
@@ -44,11 +44,25 @@ export default function AdminEngagementCreate({ onClose, setEngagements }: { onC
     }
 
     return (
-        <PopupModal onClose={onClose}>
-            <Typography variant="h2">Create New Event</Typography>
+        <div>
+            <div className="hidden sm:block">
+                <PopupModal onClose={onClose}>
+                    <Typography variant="h2">Create New Event</Typography>
 
-            <AdminEngagementEditForm engagement={engagement} setEngagement={setEngagement}/>
-            <Button onClick={createEvent} variant="primary">Create</Button>
-        </PopupModal>
+                    <AdminEngagementEditForm engagement={engagement} setEngagement={setEngagement} />
+                    <Button onClick={createEvent} variant="primary">Create</Button>
+                </PopupModal>
+            </div>
+            <div className="sm:hidden block">
+                <div className="fixed inset-0 w-screen h-screen z-50 flex justify-center items-center bg-white overflow-hidden">
+                    {/* Improved responsive container */}
+                    <div className="w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5 bg-white p-5 rounded-lg shadow-lg overflow-y-auto max-h-screen">
+                        <Typography variant="h2">Create New Event</Typography>
+                        <AdminEngagementEditForm engagement={engagement} setEngagement={setEngagement} />
+                        <Button onClick={createEvent} variant="primary">Create</Button>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }

@@ -1,7 +1,7 @@
 import { isAdmin } from "@/lib/db/utils";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import sendInviteEmail from "./email";
+import sendEmail from "@/lib/email/utils";
 
 export async function POST(request: Request) {
     if (!(await isAdmin())) {
@@ -31,6 +31,10 @@ export async function POST(request: Request) {
             code: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
         },
     });
-    sendInviteEmail(email, message, invite.code);
+    await sendEmail(
+        email, 
+        'Welcome to SpeakOUT Boston!', 
+        `${message}\n\nYour invite code is: ${invite.code}. To create an account, visit http://localhost:3000`
+    )
     return new NextResponse(JSON.stringify(invite), { status: 200 });
 }

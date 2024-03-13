@@ -37,6 +37,22 @@ export const getSelf = async () => {
     return user;
 }
 
+export const getUser = async (id: number) => {
+    // ensure that user is admin or the user is the same as the one being requested
+    const session = await getServerSession(authOptions);
+    const sessionUser: any = session?.user;
+    if (!id || !session || !session.user || (sessionUser.role !== "ADMIN" && parseInt(sessionUser.id) !== id)) {
+        return null;
+    }
+    const user = await prisma.user.findUnique({
+        select: userNoPasswordFields,
+        where: {
+            id: id
+        }
+    });
+    return user;
+}
+
 export const getEngagements = async () => {
     if (await isAdmin()) {
         return await prisma.engagement.findMany({
@@ -48,4 +64,42 @@ export const getEngagements = async () => {
     } else {
         return await prisma.engagement.findMany();
     }
+}
+
+export const getFutureEngagements = async () => {
+    if (await isAdmin()) {
+        return await prisma.engagement.findMany({
+            where: {
+                start: {
+                    gte: new Date()
+                }
+            },
+            include: {
+                pendingSpeakers: true,
+                confirmedSpeakers: true,
+            }
+        });
+    } else {
+        return await prisma.engagement.findMany({
+            where: {
+                start: {
+                    gte: new Date()
+                }
+            },
+        });
+    }
+}
+
+export const getNotifications = async () => {
+    const session = await getServerSession(authOptions);
+    const sessionUser: any = session?.user;
+    if (!session || !session.user) {
+        return [];
+    }
+    const notifications = await prisma.notification.findMany({
+        where: {
+            userId: parseInt(sessionUser.id)
+        }
+    });
+    return notifications;
 }

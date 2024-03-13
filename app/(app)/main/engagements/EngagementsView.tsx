@@ -18,8 +18,8 @@ export default function EngagementsView({ engagemnts, admin }: { engagemnts: (En
     const [showCreateEvent, setShowCreateEvent] = useState(false)
 
     return (
-        <div className="px-20 pt-10">
-            <div className="flex justify-between items-center mb-4 ">
+        <div className="px-20 pt-10 h-full min-h-screen">
+            <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-4 ">
                 <div className="relative">
                     <ViewSelector view={view} setView={setView} />
                 </div>

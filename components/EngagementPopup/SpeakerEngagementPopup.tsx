@@ -8,6 +8,7 @@ import { GoLocation } from "react-icons/go";
 import { SpeakerStatus } from '@/lib/types';
 import PopupModal from './PopupModal';
 import { Engagement } from '@prisma/client';
+import { AiOutlineClose } from 'react-icons/ai';
 
 export default function SpeakerEngagementPopup({ engagement, onClose }: { engagement: Engagement, onClose: () => void }) {
     const { title, location, start, status, description, tags } = engagement;
@@ -15,56 +16,58 @@ export default function SpeakerEngagementPopup({ engagement, onClose }: { engage
     useEffect(() => {
         fetch(`/api/engagements/status?id=${engagement.id}`)
             .then(res => res.json()
-            .then(data => setSpeakerStatus(data.status)))
+                .then(data => setSpeakerStatus(data.status)))
     })
 
     const signUp = () => {
         fetch("/api/engagements/signup", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id})
+            body: JSON.stringify({ engagementId: engagement.id })
         }).then(res => res.json().then(data => setSpeakerStatus(data.status)))
     }
 
     const optOut = () => {
         fetch("/api/engagements/optout", {
             method: "POST",
-            body: JSON.stringify({engagementId: engagement.id})
+            body: JSON.stringify({ engagementId: engagement.id })
         }).then(res => res.json().then(data => console.log(data)))
     }
 
     return (
-        <PopupModal onClose={onClose}>
-            <span className="text-[#380D5A] font-medium"> <Typography variant="h2">{title}</Typography></span>
+        <div>
+            <div className="hidden sm:block">
+                <PopupModal onClose={onClose}>
+                    <span className="text-[#380D5A] font-medium"> <Typography variant="h2">{title}</Typography></span>
 
-            <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
-                <GoLocation className="pr-1 text-xl" />
-                {location}
+                    <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
+                        <GoLocation className="pr-1 text-xl" />
+                        {location}
 
-                <IoMdTime className="text-xl" />
+                        <IoMdTime className="text-xl" />
 
-                <span className="bg-white py-1 rounded-full">{new Date(start).toDateString()}</span>
+                        <span className="bg-white py-1 rounded-full">{new Date(start).toDateString()}</span>
 
-                <FaRegDotCircle className="pr-1 text-xl" />
-                {status}
-            </div>
-            <div>
-                <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Description</span>
-            </div>
-            <div className="mb-4">
-                <Typography variant="p1">
-                    {description}
-                </Typography>
-            </div>
+                        <FaRegDotCircle className="pr-1 text-xl" />
+                        {status}
+                    </div>
+                    <div>
+                        <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Description</span>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="p1">
+                            {description}
+                        </Typography>
+                    </div>
 
-            <div>
-                <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Identity Tags</span>
-            </div>
-            <div className="mt-3 mb-3 flex flex-row space-x-3">
-                {tags.map((tag, index) => (
-                    <IdentityTag key={index} label={tag}></IdentityTag>
-                ))}
-            </div>
-            {/* {isConfirmed && (
+                    <div>
+                        <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Identity Tags</span>
+                    </div>
+                    <div className="mt-3 mb-3 flex flex-row space-x-3">
+                        {tags.map((tag, index) => (
+                            <IdentityTag key={index} label={tag}></IdentityTag>
+                        ))}
+                    </div>
+                    {/* {isConfirmed && (
                         <div>
                             <div>
                                 <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-3">
@@ -83,26 +86,106 @@ export default function SpeakerEngagementPopup({ engagement, onClose }: { engage
                             </div>
                         </div>
                     )} */}
-            
 
-            {speakerStatus == "unmarked" && (
-                <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
-                    onClick={signUp}>
-                    I'm Available
-                </button>
-            )}
-            {speakerStatus == "pending" && (
-                <div className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5">
-                    Pending...
+
+                    {speakerStatus == "unmarked" && (
+                        <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
+                            onClick={signUp}>
+                            I'm Available
+                        </button>
+                    )}
+                    {speakerStatus == "pending" && (
+                        <div className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5">
+                            Pending...
+                        </div>
+                    )}
+
+                    {speakerStatus == "confirmed" && (
+                        <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
+                            onClick={optOut}>
+                            Opt Out
+                        </button>
+                    )}
+                </PopupModal>
+            </div>
+
+
+            <div className="block sm:hidden">
+                <div className="fixed inset-0 w-screen h-screen z-50 bg-white p-6 text-left w-[70%] flex flex-col overflow-y-auto">
+                    <div className="flex justify-end">
+                        <AiOutlineClose className="cursor-pointer" onClick={onClose} />
+                    </div>
+                    <span className="text-[#380D5A] font-medium"> <Typography variant="h2">{title}</Typography></span>
+
+                    <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
+                        <GoLocation className="pr-1 text-xl" />
+                        {location}
+
+                        <IoMdTime className="text-xl" />
+
+                        <span className="bg-white py-1 rounded-full">{new Date(start).toDateString()}</span>
+
+                        <FaRegDotCircle className="pr-1 text-xl" />
+                        {status}
+                    </div>
+                    <div>
+                        <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Description</span>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="p1">
+                            {description}
+                        </Typography>
+                    </div>
+
+                    <div>
+                        <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Identity Tags</span>
+                    </div>
+                    <div className="mt-3 mb-3 flex flex-row space-x-3">
+                        {tags.map((tag, index) => (
+                            <IdentityTag key={index} label={tag}></IdentityTag>
+                        ))}
+                    </div>
+                    {/* {isConfirmed && (
+                <div>
+                    <div>
+                        <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-3">
+                            Speakers ({numSpeakers})
+                        </span>
+                    </div>
+                    <div className="mt-2 mb-8 flex flex-row space-x-3">
+                        {speakers.map((speaker, index) => (
+                            <SpeakerCard
+                                key={index}
+                                image={speaker.image}
+                                name={speaker.name}
+                                pronouns={speaker.pronouns}
+                            />
+                        ))}
+                    </div>
                 </div>
-            )}
+            )} */}
 
-            {speakerStatus == "confirmed" && (
-                <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
-                    onClick={optOut}>
-                    Opt Out
-                </button>
-            )}
-        </PopupModal>
+
+                    {speakerStatus == "unmarked" && (
+                        <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
+                            onClick={signUp}>
+                            I'm Available
+                        </button>
+                    )}
+                    {speakerStatus == "pending" && (
+                        <div className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5">
+                            Pending...
+                        </div>
+                    )}
+
+                    {speakerStatus == "confirmed" && (
+                        <button className="absolute bottom-0 right-0 bg-[#7481D6] px-8 py-2 rounded-full text-white text-sm font-sans font-medium m-5"
+                            onClick={optOut}>
+                            Opt Out
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 }

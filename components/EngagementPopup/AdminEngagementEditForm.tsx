@@ -23,8 +23,8 @@ export default function AdminEngagementEditForm({ engagement, setEngagement }: {
                     className="text-[#380D5A] font-medium font-serif text-[20px] w-full border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6]"
                 />
             </div>
-            <div className="flex flex-row items-center mb-2 text-sm font-sans text-[#11173D] space-x-2" >
-                <span className="border border-black w-[20%] rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+            <div className="flex flex-col sm:flex-row sm:items-center text-sm font-sans text-[#11173D] sm:space-x-2" >
+                <span className="border border-black w-[100%] mb-2 sm:w-[20%] rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
                     <GoLocation className="pr-1 text-xl" />
                     <input
                         placeholder="Location"
@@ -34,12 +34,12 @@ export default function AdminEngagementEditForm({ engagement, setEngagement }: {
                         className="w-full pl-1 pr-1"
                     />
                 </span>
-                <span className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+                <span className="border border-black rounded-xl mb-2 px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
                     <IoMdTime className="text-xl mr-2" />
                     <DatePicker selected={engagement['start']} onChange={(date: Date) => setEngagement({ ...engagement, start: date })} />
                 </span>
                 <StatusDropdown status={engagement.status} setStatus={(status: string) => { setEngagement({ ...engagement, status: status }) }} />
-                <span className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+                <span className="border border-black rounded-xl mb-2 px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
                     <IoPeopleSharp />
                     <input className="ml-2 w-[30px]" type="number" name="capacity" value={engagement.capacity} onChange={handleChange} />
                 </span>

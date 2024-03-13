@@ -19,14 +19,30 @@ export function AdminEngagementPopup({ engagement, setEngagement, onClose }: { e
     };
 
     return (
-        <PopupModal onClose={onClose}>
-            <div>
-                {editMode ? (
-                    <AdminEngagementEdit engagement={engagement} setEngagement={setEngagement} toggleEditMode={toggleEditMode} />
-                ) : (
-                    <AdminEngagementView engagement={engagement} toggleEditMode={toggleEditMode} />
-                )}
+        <div>
+            <div className="hidden sm:block"> {/* This hides the component on screens smaller than 640px, and shows it on larger screens */}
+                <PopupModal onClose={onClose}>
+                    <div>
+                        {editMode ? (
+                            <AdminEngagementEdit engagement={engagement} setEngagement={setEngagement} toggleEditMode={toggleEditMode} />
+                        ) : (
+                            <AdminEngagementView engagement={engagement} toggleEditMode={toggleEditMode} />
+                        )}
+                    </div>
+                </PopupModal>
             </div>
-        </PopupModal>
+            <div className="sm:hidden block">
+                <div className="fixed inset-0 w-screen h-screen z-50 flex justify-center items-center bg-white overflow-hidden">
+                    {/* Improved responsive container */}
+                    <div className="w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5 bg-white p-5 rounded-lg shadow-lg overflow-y-auto max-h-screen">
+                        {editMode ? (
+                            <AdminEngagementEdit engagement={engagement} setEngagement={setEngagement} toggleEditMode={toggleEditMode} />
+                        ) : (
+                            <AdminEngagementView engagement={engagement} toggleEditMode={toggleEditMode} />
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }

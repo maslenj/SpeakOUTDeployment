@@ -9,7 +9,7 @@ export default function StatusDropdown({ status, setStatus } : { status: string,
 
     return (
         <div className="relative">
-            <div className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
+            <div className="border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row mb-2">
                 <FaRegDotCircle className="pr-1 text-xl" />
                 <div className="mr-1">{status}</div>
                 <button onClick={() => setShowStatusDropdown(!showStatusDropdown)}

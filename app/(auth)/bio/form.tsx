@@ -1,24 +1,35 @@
 import Button from "@/components/Button";
-import UploadIcon from "@/components/icons/UploadIcon";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TagInput from "./TagInput";
 import ImageUpload from "./ImageUpload";
+import { Input } from "./Input"
+import z from 'zod'
+import { TextArea } from "./TextArea";
 
-interface BioData {
-    firstname?: string,
-    lastname?: string,
-    image?: string,
-    pronouns?: string,
-    about?: string,
-    tags?: string[],
-}
+const BioDataSchema = z.object({
+    firstname: z.string().min(1),
+    lastname: z.string().min(1),
+    image: z.string().min(1),
+    pronouns: z.string().min(1),
+    about: z.string().min(1),
+    tags: z.array(z.string())
+})
+
+type BioData = z.infer<typeof BioDataSchema>
 
 export default function BioForm() {
     const router = useRouter()
-    const [formData, setFormData] = useState<BioData>({})
+    const [formData, setFormData] = useState<BioData>({
+        firstname: '',
+        lastname: '',
+        image: '',
+        pronouns: '',
+        about: '',
+        tags: []
+    })
     const [error, setError] = useState("")
+    const [zodError, setZodError] = useState<null | any>(null)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData(formData => {
@@ -33,8 +44,14 @@ export default function BioForm() {
         e.preventDefault()
     }
 
-    const submitForm = async () => {        
-        fetch('/api/profile', { method: 'PATCH', body: JSON.stringify(formData) })
+    const submitForm = async () => {       
+        // go through each validator and check if the value is empty
+        const validationResult = BioDataSchema.safeParse(formData);
+        if (!validationResult.success) {
+            setError("Please fill out all required fields");
+            setZodError(validationResult.error.format());
+        } else {
+            fetch('/api/profile', { method: 'PATCH', body: JSON.stringify(formData) })
             .then(res => res.json())
             .then(data => {
                 if (data.error) {
@@ -46,6 +63,7 @@ export default function BioForm() {
             .catch(err => {
                 console.error(err)
             })
+        }
     }
 
     return (
@@ -59,41 +77,41 @@ export default function BioForm() {
                 </div>
                 <div className="col-span-3">
                     <div className="my-3">
-                        <input
+                        <Input
                             placeholder="First Name"
-                            className={'w-full py-2 px-3 inline-block border placeholder-[#1E2A78] border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 text-base flex-center'}
                             name="firstname"
                             value={formData['firstname']}
                             onChange={handleChange}
+                            error={ zodError && zodError['firstname'] }
                         />
                     </div>
                     <div className="my-3">
-                        <input
+                        <Input
                             placeholder="Last Name"
-                            className={'w-full py-2 px-3 inline-block border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-[#1E2A78] text-base flex-center'}
                             name="lastname"
                             value={formData['lastname']}
                             onChange={handleChange}
+                            error={ zodError && zodError['lastname'] }
                         />
                     </div>
                     <div className="my-3">
-                        <input
+                        <Input
                             placeholder="Pronouns"
-                            className={'w-full py-2 px-3 inline-block border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-[#1E2A78] text-base flex-center'}
                             name="pronouns"
                             value={formData['pronouns']}
                             onChange={handleChange}
+                            error={ zodError && zodError['pronouns'] }
                         />
                     </div>
                 </div>
                 <div className="col-span-5">
                     <div className="my-3">
-                        <textarea
+                        <TextArea
                             placeholder="Tell us about yourself"
-                            className="mt-1 py-2 px-3 block w-full border border-indigo-950 rounded-md shadow-sm focus:outline-none focus:border-indigo-950 focus:ring focus:ring-blue-200 transition duration-200 placeholder-[#1E2A78] text-base overflow-y-auto text-med font-inter text-slate-950 min-h-[100px]"
                             name="about"
                             value={formData['about']}
                             onChange={handleChange}
+                            error={ zodError && zodError['about'] }
                         />
                     </div>
                     <div className="my-3">

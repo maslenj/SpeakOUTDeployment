@@ -30,7 +30,7 @@ export function EngagementCard({ engagement, setEngagement }: { engagement: Enga
     const date = formatDate(new Date(engagement.start))
     const startTime = dateToAMPM(new Date(engagement.start))
     const endTime = dateToAMPM(new Date(engagement.end))
-
+    
     const handleViewEventClick = () => {
         setPopupOpen(true);
     };

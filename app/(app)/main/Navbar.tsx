@@ -20,7 +20,7 @@ export default function Navbar({ user, children }: { user: UserNoPassword, child
                     <Hamburger toggled={isOpen} size={20} toggle={setOpen} />
                     <NavbarMobile routes={routes} isOpen={isOpen} setOpen={setOpen} />
                 </div>
-                <img className="mx-4" src="../images/SpeakOUTLogo.svg" />
+                <img className="mx-4" src="/images/SpeakOUTLogo.svg" />
                 <div className="mx-4 hover:cursor-pointer">
                     <Link href="/main/profile"><Avatar image={!!user ? user.image : ""} /></Link>
                 </div>

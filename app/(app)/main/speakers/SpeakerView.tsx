@@ -18,22 +18,32 @@ function Button({ onClick, children }: { onClick: () => void, children: React.Re
   );
 }
 
+
 export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<UserNoPassword[]>([]);
   const [isEmailPopupVisible, setEmailPopupVisible] = useState(false);
   const [isInvitePopupVisible, setInvitePopupVisible] = useState(false);
-  const [selectall, setSelectAll] = useState(true);
+  const [selectAll, setSelectAll] = useState(true); // Ensure this starts as true or false depending on your initial state preference
 
-  const handleUserSelection = (userId: number) => {
-    // Check if the user is already selected
-    if (selectedUsers.includes(userId)) {
-      console.log(`Removing user with ID ${userId} from selectedUsers array`);
-      // If selected, remove from the array
-      setSelectedUsers(prevSelected => prevSelected.filter(id => id !== userId));
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      // Select all users
+      setSelectedUsers(users);
     } else {
-      console.log(`Adding user with ID ${userId} to selectedUsers array`);
+      // Deselect all users
+      setSelectedUsers([]);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleUserSelection = (user: UserNoPassword) => {
+    // Check if the user is already selected
+    if (selectedUsers.includes(user)) {
+      // If selected, remove from the array
+      setSelectedUsers(prevSelected => prevSelected.filter(prevUser => prevUser.id !== user.id));
+    } else {
       // If not selected, add to the array
-      setSelectedUsers(prevSelected => [...prevSelected, userId]);
+      setSelectedUsers(prevSelected => [...prevSelected, user]);
     }
   };
 
@@ -46,35 +56,7 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
     // Close the email popup
     setEmailPopupVisible(false);
   };
-
-  const handleSelectAllButtonClick = () => {
-    if (users.length > 0) {
-      users.forEach(user => {
-        if (!selectedUsers.includes(user.id)) {
-          setSelectedUsers(prevSelected => [...prevSelected, user.id]);
-        }
-      });
-    }
-    setSelectAll(false);
-  };
-
-  const handleDeSelectAllButtonClick = () => {
-    if (users.length > 0) {
-      users.forEach(user => {
-        if (selectedUsers.includes(user.id)) {
-          setSelectedUsers(prevSelected => prevSelected.filter(id => id !== user.id));
-        }
-      });
-    }
-    setSelectAll(true);
-  };
-
-  const handleInviteUsers = async () => {
-    fetch('/api/users/invite', {
-      method: "POST",
-    })
-  }
-
+  
   const handleDeleteUsers = async () => {
     try {
       // Check if there are selected users to delete
@@ -125,29 +107,22 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
   return (
     <>
       <main className="p-5">
-        <div >
-          <div className="flex justify-between">
-            <span className="text-4xl text-indigo-800 font-serif font-semibold">
+        <div>
+          <div className="flex flex-col md:flex-row md:justify-between">
+            <span className="text-4xl text-indigo-800 font-serif font-semibold flex justify-center sm:justify-start">
               Speakers
             </span>
-
-            <span>
+            <span className="grid md:grid-cols-4 sm:grid-cols-2">
               <Button
                 onClick={handleEmailButtonClick}
               >
                 Email
               </Button>
-              {selectall ?
-                (<Button
-                  onClick={handleSelectAllButtonClick}
-                >
-                  Select All
-                </Button>) :
-                (<Button
-                  onClick={handleDeSelectAllButtonClick}
-                >
-                  Deselect All
-                </Button>)}
+              <Button
+                onClick={toggleSelectAll}
+              >
+                {selectAll ? 'Select All' : 'Deselect All'}
+              </Button>
               <Button
                 onClick={handleDeleteUsers}
               >
@@ -168,13 +143,13 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
           {users.length > 0 ? (
             users.map(user => {
               return (
-                    <SpeakerCard
-                      key={user.id}
-                      speaker={user}
-                      isSelected={selectedUsers.includes(user.id)}
-                      onSelect={() => handleUserSelection(user.id)}
-                      users={users}
-                    />
+                <SpeakerCard
+                  key={user.id}
+                  speaker={user}
+                  isSelected={selectedUsers.includes(user)}
+                  onSelect={() => handleUserSelection(user)}
+                  users={users}
+                />
               );
             })
           ) : (
@@ -184,12 +159,10 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
       </main>
       {isEmailPopupVisible && (
         <EmailSpeakers
-          IDs={selectedUsers}
-          users={users}
+          users={selectedUsers}
           onClose={handleCloseEmailPopup}
         />
       )}
-
       {
         isInvitePopupVisible && (
           <InviteSpeakersPopup
@@ -197,7 +170,6 @@ export default function SpeakerView({ users }: { users: UserNoPassword[] }) {
           />
         )
       }
-
     </>
   )
 }

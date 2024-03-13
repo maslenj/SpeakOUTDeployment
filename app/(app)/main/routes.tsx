@@ -6,7 +6,7 @@ const speakerRoutes = [
       />
     ),
     text: "Home",
-    link: "home"
+    link: "/main/home"
   },
   {
     icon: (
@@ -15,7 +15,7 @@ const speakerRoutes = [
       />
     ),
     text: "Engagements",
-    link: "engagements"
+    link: "/main/engagements"
   },
 ];
 
@@ -27,7 +27,7 @@ const adminRoutes = [
       />
     ),
     text: "Home",
-    link: "home"
+    link: "/main/home"
   },
   {
     icon: (
@@ -36,7 +36,7 @@ const adminRoutes = [
       />
     ),
     text: "Engagements",
-    link: "engagements"
+    link: "/main/engagements"
   },
   {
     icon: (
@@ -45,7 +45,7 @@ const adminRoutes = [
       />
     ),
     text: "Speakers",
-    link: "speakers"
+    link: "/main/speakers"
   },
 ];
 

@@ -1,9 +1,10 @@
-'use client' 
+'use client'
 import React, { useState } from 'react'
 import Button from '@/components/Button'
 import { Input } from '@/components/TextInput'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface LoginData {
     email?: string,
@@ -13,7 +14,7 @@ interface LoginData {
 export const LoginForm = () => {
     const router = useRouter()
     const callbackUrl = '/main/home'
-    const [formData, setFormData] = useState<LoginData>({email: '', password: ''})
+    const [formData, setFormData] = useState<LoginData>({ email: '', password: '' })
     const [error, setError] = useState("")
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(formData => {
@@ -39,7 +40,7 @@ export const LoginForm = () => {
             } else {
                 setError('Invalid email or password.')
             }
-        } catch (error : any) {}
+        } catch (error: any) { }
     }
 
     return (
@@ -54,15 +55,20 @@ export const LoginForm = () => {
                     value={formData['email']}
                     onChange={handleChange}
                 />
-                <Input
-                    required
-                    icon='password'
-                    name='password'
-                    type='password'
-                    placeholder='Password'
-                    value={formData['password']}
-                    onChange={handleChange}
-                />
+                <div>
+                    <Input
+                        required
+                        icon='password'
+                        name='password'
+                        type='password'
+                        placeholder='Password'
+                        value={formData['password']}
+                        onChange={handleChange}
+                    />
+                    <Link href="forgot-password" className='text-[12px] block text-[#1E2A78] w-full text-right'>
+                        Forgot Password?
+                    </Link>
+                </div>
 
                 {
                     error && (

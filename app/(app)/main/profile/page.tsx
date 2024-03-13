@@ -1,4 +1,5 @@
-import ProfileView from "./ProfileView";
+import { redirect } from "next/navigation";
+import ProfileView from "./[id]/SelfView";
 import { getSelf } from "@/lib/db/utils";
 
 export default async function Profile() {
@@ -6,7 +7,5 @@ export default async function Profile() {
   if (user == null) {
     throw new Error("User not found");
   }
-  return (
-    <ProfileView user={user} />
-  )
+  redirect(`/main/profile/${user.id}`)
 }

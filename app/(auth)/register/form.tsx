@@ -4,8 +4,9 @@ import Button from '@/components/Button'
 import { Input } from '@/components/TextInput'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { z } from "zod";
 
-interface RegistrationData { 
+interface RegistrationData {
     email?: string,
     password?: string,
     accesscode?: string
@@ -13,8 +14,14 @@ interface RegistrationData {
 
 export const RegisterForm = () => {
     const [formData, setFormData] = useState<RegistrationData>({})
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>(null)
     const router = useRouter()
+
+    const schema = z.object({
+        email: z.string().email({ message: 'Must be a valid email' }),
+        password: z.string(), // Add your own password validation here if needed
+        accesscode: z.string(), // And for accesscode as well
+    });
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +35,13 @@ export const RegisterForm = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        const validationResult = schema.safeParse(formData);
+        if (!validationResult.success) {
+            setError(validationResult.error.message);
+            return;
+        }
+
         try {
             const res = await fetch('/api/register', {
                 method: 'POST',

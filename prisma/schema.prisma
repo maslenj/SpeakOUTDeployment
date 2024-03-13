@@ -63,6 +63,14 @@ model Invite {
   code      String   @unique
 }
 
+model ForgotPassword {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String
+  code      String   @unique
+}
+
 enum Role {
   USER
   ADMIN

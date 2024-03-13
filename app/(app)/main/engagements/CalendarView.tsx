@@ -34,7 +34,10 @@ const CalendarView = ({ currentDate, engagements, setEngagements }: { currentDat
 
   return (
     <>
-      <div className="container mx-auto">
+    <div className='lg:hidden block'>
+      <span className='text-xl'>Calendar is not Available for this screen size</span>
+    </div>
+      <div className="container mx-auto lg:block hidden">
         <div className="grid grid-cols-7 bg-white">
           {daysOfWeek.map(day => (
             <div key={day} className="text-center text-white bg-indigo-900 p-4 text-xl font-medium font-['DM Sans']">

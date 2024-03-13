@@ -1,3 +1,4 @@
+import Button from "@/components/Button";
 import PopupModal from "@/components/EngagementPopup/PopupModal";
 import Typography from "@/components/Typography";
 import { useState } from "react";
@@ -8,12 +9,15 @@ export default function InviteSpeakersPopup({ onClose }: { onClose: () => void }
         setFormData(prev => ({...prev, [e.target.name]: e.target.value}))
     }
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        fetch('/api/users/invite', {
+        const res = await fetch('/api/users/invite', {
             method: "POST",
             body: JSON.stringify(formData),
         })
+        if (res.ok) {
+            onClose()
+        }
     }
 
     return (
@@ -24,7 +28,7 @@ export default function InviteSpeakersPopup({ onClose }: { onClose: () => void }
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full h-40 border-2 border-gray-300 rounded-md p-2"
+                    className="w-full h-40 border border-black rounded-md p-2"
                     placeholder="Invite message"
                 />
                 <div className="flex">
@@ -33,15 +37,15 @@ export default function InviteSpeakersPopup({ onClose }: { onClose: () => void }
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="border-2 border-gray-300 rounded-md p-2 flex-grow"
+                        className="rounded-md p-2 border border-black flex-grow mr-2"
                         placeholder="Email"
                     />
-                    <button
+                    <Button
                         type="submit"
-                        className="bg-indigo-800 text-white rounded-md p-2"
+                        variant="primary"
                     >
                         Invite
-                    </button>
+                    </Button>
                 </div>
             </form>
         </PopupModal>

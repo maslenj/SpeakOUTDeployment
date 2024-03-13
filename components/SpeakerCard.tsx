@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Avatar from '@/components/Avatar';
 import { EmailSpeakers } from '@/components/EmailSpeakers';
 import { UserNoPassword } from '@/lib/types';
+import Link from 'next/link';
 
 interface Props {
   speaker: UserNoPassword
@@ -39,7 +40,7 @@ export default function SpeakerCard({ speaker, isSelected, onSelect, users }: Pr
         <button
           className="w-full h-full"
           type="button"
-          onClick={() => {setIsOpen(isOpen => !isOpen)}}
+          onClick={() => { setIsOpen(isOpen => !isOpen) }}
         >
           <div className="flex justify-between">
             <div className="mr-3">
@@ -49,7 +50,7 @@ export default function SpeakerCard({ speaker, isSelected, onSelect, users }: Pr
               <div className="text-blue-600 text-left mr-2 text-xl">{speaker.firstname} {speaker.lastname}</div>
               <div className="text-left">{speaker.pronouns}</div>
             </span>
-            <div className="text-center">
+            <div className="text-center hidden sm:block">
               <div className = "mt-4 flex justify-center">{speaker.email}</div>
             </div>
             <svg
@@ -69,17 +70,19 @@ export default function SpeakerCard({ speaker, isSelected, onSelect, users }: Pr
           </div>
         </button>
         {isOpen && (
-          <div className="ml-10 mt-10 text-center">
-            <button
-              type="button"
-              className="ml-[35%] text-sm border border-solid border-black text-black font-bold py-1 px-6 rounded-full hover:bg-gray-200"
-            >
-              Profile
-            </button>
+          <div className="ml-[5%] mt-10 text-center">
+            <Link href={`/main/profile/${speaker.id}`}>
+              <button
+                type="button"
+                className="ml-[35%] text-sm border border-solid border-black text-black font-bold py-1 px-6 rounded-full hover:bg-gray-200"
+              >
+                Profile
+              </button>
+            </Link>
             <button
               type="button"
               className="ml-[5%] text-sm border border-solid border-black text-black font-bold py-1 px-6 rounded-full hover:bg-gray-200"
-              onClick = {handleEmailButtonClick} 
+              onClick={handleEmailButtonClick}
             >
               Email
             </button>
@@ -87,13 +90,12 @@ export default function SpeakerCard({ speaker, isSelected, onSelect, users }: Pr
         )}
         {isEmailPopupVisible && (
           <EmailSpeakers
-            IDs={[speaker.id]}
-            users={users}
+            users={[speaker]}
             onClose={handleCloseEmailPopup}
           />
         )}
       </div>
     </div>
-    
+
   );
 }
