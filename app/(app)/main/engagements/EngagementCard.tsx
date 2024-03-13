@@ -21,7 +21,7 @@ export default function EngagementCard({ engagement, setEngagement }: { engageme
 
     return (
         <span className="bg-white border-[#172554] border-2 rounded-lg p-3 text-left flex flex-col">
-            <img src={engagement.image} alt="Krusty" className="mb-2 rounded-lg mx-auto w-full h-[140px]" />
+            <img src={engagement.image} alt="Engagement Image" className="mb-2 rounded-lg mx-auto w-full h-[140px]" />
             <div> <Typography variant="h3"> {engagement.title} </Typography></div>
             <div className="flex flex-row items-center">
                 <IoMdTime className="pr-1" />
