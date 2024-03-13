@@ -10,7 +10,7 @@ import { TextArea } from "./TextArea";
 const BioDataSchema = z.object({
     firstname: z.string().min(1),
     lastname: z.string().min(1),
-    image: z.string().min(1),
+    image: z.string(),
     pronouns: z.string().min(1),
     about: z.string().min(1),
     tags: z.array(z.string())

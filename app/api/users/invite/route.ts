@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     await sendEmail(
         email, 
         'Welcome to SpeakOUT Boston!', 
-        `${message}\n\nYour invite code is: ${invite.code}. To create an account, visit http://localhost:3000`
+        `${message}\n\nYour invite code is: ${invite.code}. To create an account, visit https://jimmymaslen.com/signup`
     )
     return new NextResponse(JSON.stringify(invite), { status: 200 });
 }
