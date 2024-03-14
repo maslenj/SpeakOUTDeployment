@@ -38,20 +38,6 @@ You will first need to clone this repository to your local computer. This can be
 
 In order to run the app you will need to have node and npm installed. Instructions can be found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). 
 
-### Running the development server
-
-Before running the app, install dependencies:
-```bash
-npm i
-```
-
-To run the development server:
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
 ### Working with the database
 
 For our database, we are using Postgres. To develop locally, you will need to have an instance of Postgres running on your system. The easiest way to do this is to go to https://www.postgresql.org/download/ and download Postgres.app.
@@ -84,5 +70,19 @@ npx prisma db push --force-reset
 npx prisma db seed
 npx prisma studio
 ```
+
+### Running the development server
+
+Before running the app, install dependencies:
+```bash
+npm i
+```
+
+To run the development server:
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 If you click on the `User` model, you should see at least two entries.
