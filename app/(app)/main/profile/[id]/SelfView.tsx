@@ -8,6 +8,7 @@ import { useState } from "react";
 import Button from "@/components/Button";
 import { signOut } from 'next-auth/react'
 import { UserNoPassword } from "@/lib/types";
+import Link from "next/link";
 
 
 export default function SelfView({ user }: { user: UserNoPassword }) {
@@ -42,10 +43,15 @@ export default function SelfView({ user }: { user: UserNoPassword }) {
         setEditable={setEditable}
       />}
 
-      <div className="my-4">
+      <div className="my-4 space-x-2">
         <Button variant="primary" onClick={signOut}>
           Sign Out
         </Button>
+        <Link href="/main/update-password">
+          <Button variant="primary">
+            Update Password
+          </Button>
+        </Link>
       </div>
 
     </div>
