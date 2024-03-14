@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import { signOut } from 'next-auth/react'
 import { UserNoPassword } from "@/lib/types";
 import Link from "next/link";
+import ImageUpload from "@/app/(auth)/bio/ImageUpload";
 
 
 export default function SelfView({ user }: { user: UserNoPassword }) {
@@ -20,7 +21,17 @@ export default function SelfView({ user }: { user: UserNoPassword }) {
   return (
     <div className="w-full md:px-20 px-5">
       <div className="mb-1 mt-5 flex items-center">
-        <Avatar image={userData.image} />
+        {editable ?
+          <div>
+            <ImageUpload
+              image={userData.image}
+              setImage={(image) => setUserData({ ...userData, image: image })}
+            />
+          </div>
+          :
+          <Avatar image={userData.image} />
+        }
+
         <div className="ml-2 flex flex-row">
           <div className="pl-3 font-medium">
             <Typography variant="h1">
@@ -33,15 +44,15 @@ export default function SelfView({ user }: { user: UserNoPassword }) {
         </div>
       </div>
       {editable ?
-      <EditableProfile
-        userData={userData}
-        setUserData={setUserData}
-        setEditable={setEditable}
-      /> :
-      <NonEditableProfile
-        userData={userData}
-        setEditable={setEditable}
-      />}
+        <EditableProfile
+          userData={userData}
+          setUserData={setUserData}
+          setEditable={setEditable}
+        /> :
+        <NonEditableProfile
+          userData={userData}
+          setEditable={setEditable}
+        />}
 
       <div className="my-4 space-x-2">
         <Button variant="primary" onClick={signOut}>
