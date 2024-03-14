@@ -32,7 +32,18 @@ Once you have pushed go to https://github.com/JumboCode/speakout-boston/branches
 
 ## Development
 
+### Prerequisite
+
+You will first need to clone this repository to your local computer. This can be done using `git clone https://github.com/maslenj/SpeakOUTDeployment.git`.
+
+In order to run the app you will need to have node and npm installed. Instructions can be found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). 
+
 ### Running the development server
+
+Before running the app, install dependencies:
+```bash
+npm i
+```
 
 To run the development server:
 ```bash
@@ -55,15 +66,16 @@ Your .env should file look something like this
 DATABASE_URL="postgresql://jimmymaslen@localhost:5432/jimmymaslen?schema=public"
 ```
 
-(new) For authentication purposes, you will also need to create a `.env.local` file.
+For authentication purposes, you will also need to create a `.env.local` file.
 ```bash
 touch .env.local
 ```
 
-(new) Inside of this file, you will want to add the following:
+Inside of this file, you will want to add the following:
 ```bash
 NEXTAUTH_URL=http://localhost:3000/
 NEXTAUTH_SECRET=secret
+RESEND_API_KEY=[api key]
 ```
 
 Now you can try pushing, seeding, and viewing the database:
