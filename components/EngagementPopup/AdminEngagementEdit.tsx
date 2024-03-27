@@ -69,7 +69,7 @@ export function AdminEngagementEdit({ engagement, setEngagement, toggleEditMode 
 
                 <div>
                     <div>
-                        <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3">Pending Speakers </span> <Button variant="secondary" onClick={() => { setPendingSpeakersEmailPopupVisible(true)}}>Email Pending Speakers</Button>
+                        <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-3"> Pending Speakers </span> <Button variant="secondary" onClick={() => { setPendingSpeakersEmailPopupVisible(true)}}>Email Pending Speakers</Button>
                     </div>
                     <div className="border border-black flex flex-wrap w-full rounded-xl px-2 py-3 mt-2 mb-12">
                         {engagement.pendingSpeakers.map((speaker, index) => (
@@ -82,23 +82,12 @@ export function AdminEngagementEdit({ engagement, setEngagement, toggleEditMode 
                                 />
                             </div>
                         ))}
-                        {/* save add speaker button for later (not MVP)
-                        <button className="border border-black flex flex-row items-center bg-[#EBEEFF] pl-3 pr-3 py-1.5 rounded-3xl text-[#1E2A78] text-sm font-sans font-medium max-w-[130px] max-h-[40px]align-center">
-                            Add Speaker
-                            <AiOutlinePlus className="pl-1 text-xl" />
-                        </button> */}
                     </div>
 
                 </div>
             </div>
             <div>
                 <div className="flex flex-row justify-end">
-                    {/* <button
-                        className="bg-white px-3 py-1 rounded-full text-[#1E2A78] border border-black text-med font-sans font-medium mt-10 mb-5 mr-3 flex items-center"
-                        onClick={() => { on}}>
-                        Cancel
-                    </button> */}
-
                     <button
                         className="bg-[#7481D6] px-7 py-1 rounded-full text-black border border-black text-med font-sans font-medium mt-10 mb-5 mr-5 flex items-center"
                         onClick={saveChanges}>

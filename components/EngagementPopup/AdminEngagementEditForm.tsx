@@ -1,11 +1,13 @@
-import { GoLocation } from "react-icons/go";
-import { IoMdTime } from "react-icons/io";
-import DatePicker from "react-datepicker";
 import { EngagementWithSpeakers } from "@/lib/types";
 import TagInput from "@/app/(auth)/bio/TagInput";
 import StatusDropdown from "./StatusDropdown";
 import ImageUpload from "./ImageUpload";
 import { IoPeopleSharp } from "react-icons/io5";
+import { MultilineInput } from "./MultilineInput";
+import { Input } from "./Input";
+import { LocationInput } from "./LocationInput";
+import DateInput from "./DateInput";
+import { CapacityInput } from "./CapacityInput";
 
 export default function AdminEngagementEditForm({ engagement, setEngagement }: { engagement: EngagementWithSpeakers, setEngagement: (engagement: EngagementWithSpeakers) => void }) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -15,46 +17,57 @@ export default function AdminEngagementEditForm({ engagement, setEngagement }: {
     return (
         <>
             <div className="text-[#380D5A] font-medium my-4">
-                <input
+                <Input
                     name="title"
                     placeholder="Title"
                     value={engagement.title}
                     onChange={handleChange}
-                    className="text-[#380D5A] font-medium font-serif text-[20px] w-full border border-black rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6]"
+                    error="Please enter a title."
                 />
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center text-sm font-sans text-[#11173D] sm:space-x-2" >
-                <span className="border border-black w-[100%] mb-2 sm:w-[20%] rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
-                    <GoLocation className="pr-1 text-xl" />
-                    <input
-                        placeholder="Location"
-                        name="location"
-                        value={engagement.location}
-                        onChange={handleChange}
-                        className="w-full pl-1 pr-1"
-                    />
-                </span>
-                <span className="border border-black rounded-xl mb-2 px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
-                    <IoMdTime className="text-xl mr-2" />
-                    <DatePicker selected={engagement['start']} onChange={(date: Date) => setEngagement({ ...engagement, start: date })} />
-                </span>
-                <StatusDropdown status={engagement.status} setStatus={(status: string) => { setEngagement({ ...engagement, status: status }) }} />
-                <span className="border border-black rounded-xl mb-2 px-2 py-1 focus:outline-none focus:border-[#7481D6] flex flex-row">
-                    <IoPeopleSharp />
-                    <input className="ml-2 w-[30px]" type="number" name="capacity" value={engagement.capacity} onChange={handleChange} />
-                </span>
+                <LocationInput
+                    placeholder="Location"
+                    name="location"
+                    value={engagement.location}
+                    onChange={handleChange}
+                    error="Please enter a location."
+                />
+                <DateInput
+                    label="Start:"
+                    selected={engagement.start}
+                    onChange={(date : Date) => setEngagement({ ...engagement, start: date })}
+                    error={"Start date must be before end date."}
+                />
+                <DateInput
+                    label="End:"
+                    selected={engagement.end}
+                    onChange={(date : Date) => setEngagement({ ...engagement, end: date })}
+                    error={"End date must be after start date."}
+                />
+                <StatusDropdown 
+                    status={engagement.status} 
+                    setStatus={(status: string) => { setEngagement({ ...engagement, status: status }) }} 
+                />
+
+                <CapacityInput
+                    name="capacity"
+                    value={engagement.capacity}
+                    onChange={handleChange}
+                    min={1}
+                />
             </div>
             <div>
                 <span className="text-[20px] text-[#380D5A] font-medium font-serif mb-4">Description</span>
             </div>
             <div className="mb-4">
-                <textarea
+                <MultilineInput
                     placeholder="Description"
                     name="description"
                     value={engagement.description}
                     onChange={handleChange}
                     rows={6}
-                    className="border border-black block w-full rounded-xl px-2 py-1 focus:outline-none focus:border-[#7481D6] resize-none"
+                    error="Please enter a description."
                 />
             </div>
             <div>
@@ -69,12 +82,12 @@ export default function AdminEngagementEditForm({ engagement, setEngagement }: {
             <div>
                 <span className="text-[20px] text-[#380D5A] font-serif font-medium mb-4">Image</span>
             </div>
-            <div className="mt-3 mb-3 flex flex-wrap border border-black w-full rounded-xl px-2 py-2 focus:outline-none focus:border-[#7481D6]">
-                <ImageUpload
+            <ImageUpload
                     image={engagement.image}
                     setImage={(image: string) => { setEngagement({ ...engagement, image: image }) }}
+                    error={"Please upload an image."}
                 />
-            </div>
+            
         </>
     )
 }

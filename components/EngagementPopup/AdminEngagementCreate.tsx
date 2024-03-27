@@ -20,7 +20,7 @@ export default function AdminEngagementCreate({ onClose, setEngagements }: { onC
         tags: [],
         location: "",
         description: "",
-        capacity: 0,
+        capacity: 1,
         confirmedSpeakers: [],
         pendingSpeakers: [],
     })
